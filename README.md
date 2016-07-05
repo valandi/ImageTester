@@ -13,4 +13,4 @@ Please make sure you signed up at [Applitools](applitools.com) and you have your
 # Example
 Running the tool on a set of images located in a certain path using terminal/cmd
 
-\> `java -jar BitmapTester -k <APIKEY> -f /path/to/folder/`
+`\> java -jar BitmapTester -k <APIKEY> -f /path/to/folder/`
