@@ -14,7 +14,7 @@ import java.util.List;
 
 public class PostscriptTest extends Test {
     private static final String PS_EXT = "(?i)(\\.ps)$";
-    private static final String PS_PATTERN = "(.*)" + PS_EXT;
+    private static final String PS_PATTERN = "(.+)" + PS_EXT;
     private static final Pattern pattern = Pattern.compile(PS_PATTERN);
 
     protected PostscriptTest(File file, String appname) {

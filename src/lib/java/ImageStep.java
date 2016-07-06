@@ -8,9 +8,8 @@ import java.io.IOException;
 import java.util.regex.Pattern;
 
 public class ImageStep extends TestUnit {
-    //private static final String IMAGE_PATTERN = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)";
     private static final String IMAGE_EXT = "(\\.(?i)(jpg|png|gif|bmp))$";
-    private static final String IMAGE_PATTERN = "([^\\s]+)" + IMAGE_EXT;
+    private static final String IMAGE_PATTERN = "(.+)" + IMAGE_EXT;
     private static final Pattern pattern = Pattern.compile(IMAGE_PATTERN);
 
     protected ImageStep(File file) {

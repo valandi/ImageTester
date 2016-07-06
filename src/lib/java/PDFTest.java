@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  */
 public class PDFTest extends Test {
     private static final String PDF_EXT = "(?i)(\\.Pdf)$";
-    private static final String PDF_PATTERN = "(.*)" + PDF_EXT;
+    private static final String PDF_PATTERN = "(.+)" + PDF_EXT;
     private static final Pattern pattern = Pattern.compile(PDF_PATTERN);
 
     protected PDFTest(File file, String appname) {
