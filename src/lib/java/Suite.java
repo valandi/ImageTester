@@ -42,7 +42,7 @@ public class Suite extends TestUnit {
         }
 
         if (appname == null) {
-            appname = "BitmapTester";
+            appname = "ImageTester";
         }
 
         if (curr.isFile()) {

@@ -44,9 +44,8 @@ public class Test extends TestUnit {
             ex = e;
         } finally {
             System.out.printf("\t[%s] - %s\n", res, name());
-            if (!result.isPassed() && !result.isNew()) {
+            if (result != null && !result.isPassed() && !result.isNew())
                 System.out.printf("\tReview the result: %s\n", result.getUrl());
-            }
             if (ex != null) ex.printStackTrace();
             eyes.abortIfNotClosed();
         }

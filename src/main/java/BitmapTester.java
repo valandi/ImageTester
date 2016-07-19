@@ -19,20 +19,18 @@ public class BitmapTester {
 
         try {
             CommandLine cmd = parser.parse(options, args);
-            Eyes eyes = null;
-            if (cmd.hasOption("s")) {
-                URI server = new URI(cmd.getOptionValue("s"));
-                eyes = new Eyes(server);
-            } else {
-                eyes = new Eyes();
-            }
+            Eyes eyes = new Eyes();
 
             eyes.setAgentId("ImageTester on " + eyes.getAgentId());
-
             eyes.setApiKey(cmd.getOptionValue("k"));
-            if (cmd.hasOption("p")) {
-                eyes.setProxy(new ProxySettings(cmd.getOptionValue("p")));
-            }
+            if (cmd.hasOption("s")) eyes.setServerUrl(new URI(cmd.getOptionValue("s")));
+            if (cmd.hasOption("ml")) eyes.setMatchLevel(Utils.parseEnum(MatchLevel.class, cmd.getOptionValue("ml")));
+            if (cmd.hasOption("p")) eyes.setProxy(new ProxySettings(cmd.getOptionValue("p")));
+            if (cmd.hasOption("br")) eyes.setBranchName(cmd.getOptionValue("br"));
+            if (cmd.hasOption("pb")) eyes.setParentBranchName(cmd.getOptionValue("pb"));
+            if (cmd.hasOption("bn")) eyes.setBaselineName(cmd.getOptionValue("bn"));
+            if (cmd.hasOption("pb") && !cmd.hasOption("br"))
+                throw new ParseException("Parent Branches (pb) should be combined with branches (br).");
 
             File root = new File(cmd.getOptionValue("f", "."));
             root = new File(root.getCanonicalPath());
@@ -45,29 +43,11 @@ public class BitmapTester {
                 viewport = new RectangleSize(Integer.parseInt(dims[0]), Integer.parseInt(dims[1]));
             }
 
-            TestUnit suite = Suite.build(root, cmd.getOptionValue("a", "BitmapTester"), viewport);
+            TestUnit suite = Suite.build(root, cmd.getOptionValue("a", "ImageTester"), viewport);
 
             if (suite == null) {
                 System.out.printf("Nothing to test!\n");
                 System.exit(0);
-            }
-
-            if (cmd.hasOption("ml")) {
-                MatchLevel matchLevel = Utils.parseEnum(MatchLevel.class, cmd.getOptionValue("ml"));
-                eyes.setMatchLevel(matchLevel);
-            }
-
-            if (cmd.hasOption("pb") && !cmd.hasOption("br")) {
-                throw new ParseException("Parent Branches (pb) should be combined with branches (br).");
-            }
-            if (cmd.hasOption("br")) {
-                eyes.setBranchName(cmd.getOptionValue("br"));
-            }
-            if (cmd.hasOption("pb")) {
-                eyes.setParentBranchName(cmd.getOptionValue("pb"));
-            }
-            if (cmd.hasOption("bn")) {
-                eyes.setBaselineName(cmd.getOptionValue("bn"));
             }
 
             suite.run(eyes);
@@ -91,13 +71,13 @@ public class BitmapTester {
                 .longOpt("apiKey")
                 .desc("Applitools api key")
                 .required()
-                .hasArg()
+                .hasArg().argName("apikey")
                 .build());
 
         options.addOption(Option.builder("a")
                 .longOpt("AppName")
-                .desc("Set own application name, default: BitmapTester")
-                .hasArg().argName("Applitools_apiKey")
+                .desc("Set own application name, default: ImageTester")
+                .hasArg().argName("name")
                 .build()
         );
 
@@ -110,7 +90,7 @@ public class BitmapTester {
 
         options.addOption(Option.builder("p")
                 .longOpt("proxy")
-                .desc("Set proxy adress, optional: <user> <password>")
+                .desc("Set proxy address, optional: <user> <password>")
                 .hasArgs()//.numberOfArgs(3)
                 .argName("address")
                 .build()
