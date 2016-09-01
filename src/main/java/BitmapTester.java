@@ -43,7 +43,7 @@ public class BitmapTester {
                 viewport = new RectangleSize(Integer.parseInt(dims[0]), Integer.parseInt(dims[1]));
             }
 
-            TestUnit suite = Suite.build(root, cmd.getOptionValue("a", "ImageTester"), viewport);
+            ITestable suite = Suite.build(root, cmd.getOptionValue("a", "ImageTester"), viewport);
 
             if (suite == null) {
                 System.out.printf("Nothing to test!\n");

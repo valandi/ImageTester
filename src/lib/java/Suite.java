@@ -18,7 +18,6 @@ public class Suite extends TestUnit {
         batches_ = new LinkedList<Batch>();
     }
 
-    @Override
     public void run(Eyes eyes) throws IOException {
         if (batches_.isEmpty() && test_ == null) {
             System.out.printf("Nothing to test!\n");
@@ -35,7 +34,7 @@ public class Suite extends TestUnit {
         }
     }
 
-    public static TestUnit build(File curr, String appname, RectangleSize viewport) throws IOException {
+    public static ITestable build(File curr, String appname, RectangleSize viewport) throws IOException {
         if (!curr.exists()) {
             System.out.printf(String.format("The folder %s doesn't exists\n", curr.getAbsolutePath()));
             return null;
@@ -59,10 +58,14 @@ public class Suite extends TestUnit {
         Arrays.sort(files, NameFileComparator.NAME_COMPARATOR);
 
         for (File file : files) {
-            TestUnit unit = build(file, appname, viewport);
+            ITestable unit = build(file, appname, viewport);
             if (unit instanceof ImageStep) {
                 if (currTest == null) currTest = new Test(curr, appname, viewport);
-                currTest.addStep((ImageStep) unit);
+                ImageStep step = (ImageStep) unit;
+                if (step.hasRegionFile())
+                    currTest.addSteps(step.getRegions());
+                else
+                    currTest.addStep(step);
             } else if (unit instanceof Test) {
                 if (currBatch == null) currBatch = new Batch(curr);
                 currBatch.addTest((Test) unit);

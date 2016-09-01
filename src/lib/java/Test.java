@@ -4,6 +4,7 @@ import com.applitools.eyes.TestResults;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -13,8 +14,8 @@ import java.util.Queue;
 public class Test extends TestUnit {
 
     protected final String appname_;
-    private Queue<ImageStep> steps_;
-    private RectangleSize viewportSize_;
+    private Queue<ITestable> steps_;
+    protected RectangleSize viewportSize_;
 
     protected Test(File file, String appname) {
         this(file, appname, null);
@@ -22,19 +23,18 @@ public class Test extends TestUnit {
 
     protected Test(File file, String appname, RectangleSize viewportSize) {
         super(file);
-        steps_ = new LinkedList<ImageStep>();
+        steps_ = new LinkedList<ITestable>();
         appname_ = appname;
         viewportSize_ = viewportSize;
     }
 
-    @Override
     public void run(Eyes eyes) {
         String res = null;
         Exception ex = null;
         TestResults result = null;
         try {
             eyes.open(appname_, name(), viewportSize_);
-            for (ImageStep step : steps_) {
+            for (ITestable step : steps_) {
                 step.run(eyes);
             }
             result = eyes.close(false);
@@ -53,5 +53,9 @@ public class Test extends TestUnit {
 
     public void addStep(ImageStep step) {
         steps_.add(step);
+    }
+
+    public void addSteps(Collection<ITestable> steps) {
+        steps_.addAll(steps);
     }
 }
