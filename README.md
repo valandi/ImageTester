@@ -14,3 +14,15 @@ Please make sure you signed up at [Applitools](applitools.com) and you have your
 Running the tool on a set of images located in a certain path using terminal/cmd
 
 `\> java -jar BitmapTester -k <APIKEY> -f /path/to/folder/`
+
+# Supporting regions
+To validate only specific regions of a particular image the folder must contain .regions file with the same name as the image.
+ie. If my image file is 'step1.png' then the regions file should be 'step1.regions'.
+Internally the format should be csv 4 columns representing left,top,width,height as follow:
+
+step1.regions:
+```
+0,0,100,200
+500,100,240,123
+```
+Empty line will be considered as the entire image.
