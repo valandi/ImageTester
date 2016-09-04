@@ -3,6 +3,7 @@ import com.applitools.eyes.Region;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.opencsv.CSVReader;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -43,7 +44,8 @@ public class RegionStep implements ITestable {
         List<String[]> lines = reader.readAll();
         int l, t, w, h;
         for (String[] line : lines) {
-            if (line.length != 4) throw new IOException(
+            if (line.length == 0 && StringUtils.isEmpty(line[0])) regions.add(new ImageStep(step.file_));
+            else if (line.length != 4) throw new IOException(
                     "Invalid csv formatting for file" + regionsFile.getName() + "Should be l,t,w,h");
 
             l = Integer.parseInt(line[0]);
