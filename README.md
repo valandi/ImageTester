@@ -18,11 +18,11 @@ Running the tool on a set of images located in a certain path using terminal/cmd
 # Supporting regions
 To validate only a specific regions of a particular image the folder must contain .regions file with the same name as the image.
 ie. If my image file is 'step1.png' then the regions file should be 'step1.regions'.
-Internally the format should be csv 4 columns representing left,top,width,height as follow:
+Internally the format should be 4 columns csv in the following order: left,top,width,height
 
-step1.regions:
+Here is an example of what can be step1.regions:
 ```
 0,0,100,200
 500,100,240,123
 ```
-Empty line will be considered as the entire image.
+In order to specify the enire image to be taken just add an empty line as part of other images.
