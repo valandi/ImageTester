@@ -25,4 +25,4 @@ Here is an example of what can be step1.regions:
 0,0,100,200
 500,100,240,123
 ```
-In order to specify the enire image to be taken just add an empty line as part of other images.
+In order to specify the enire image to be taken just add an empty line as part of the regions list.
