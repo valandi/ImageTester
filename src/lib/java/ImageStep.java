@@ -16,9 +16,6 @@ public class ImageStep extends TestUnit {
     }
 
     public void run(Eyes eyes) throws IOException {
-        if (hasRegionFile())
-            throw new RuntimeException("Hurry, You found a bug! This is region step, it should be executed through it's regions");
-
         eyes.checkImage(getImage(), name());
     }
 

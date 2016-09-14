@@ -32,6 +32,10 @@ public class RegionStep implements ITestable {
         eyes.checkRegion(step_.getImage(), region_, tag_);
     }
 
+    public String name() {
+        return String.format("Image: %s, region: %s", step_.name(), region_.toString());
+    }
+
     public static boolean supports(ImageStep step) {
         return regionsFile(step.file_).exists();
     }
@@ -44,9 +48,11 @@ public class RegionStep implements ITestable {
         List<String[]> lines = reader.readAll();
         int l, t, w, h;
         for (String[] line : lines) {
-            if (line.length == 0 && StringUtils.isEmpty(line[0])) regions.add(new ImageStep(step.file_));
-            else if (line.length != 4) throw new IOException(
-                    "Invalid csv formatting for file" + regionsFile.getName() + "Should be l,t,w,h");
+            if (StringUtils.isEmpty(line[0])) {
+                regions.add(new ImageStep(step.file_));
+                continue;
+            } else if (line.length != 4) throw new IOException(
+                    "Invalid csv formatting for file " + regionsFile.getName() + " Should be left,top,width,height");
 
             l = Integer.parseInt(line[0]);
             t = Integer.parseInt(line[1]);

@@ -1,7 +1,4 @@
-import com.applitools.eyes.Eyes;
-import com.applitools.eyes.MatchLevel;
-import com.applitools.eyes.ProxySettings;
-import com.applitools.eyes.RectangleSize;
+import com.applitools.eyes.*;
 import org.apache.commons.cli.*;
 
 import java.io.File;
@@ -31,6 +28,7 @@ public class BitmapTester {
             if (cmd.hasOption("bn")) eyes.setBaselineName(cmd.getOptionValue("bn"));
             if (cmd.hasOption("pb") && !cmd.hasOption("br"))
                 throw new ParseException("Parent Branches (pb) should be combined with branches (br).");
+            if (cmd.hasOption("lf")) eyes.setLogHandler(new FileLogger(cmd.getOptionValue("lf"), true, true));
 
             File root = new File(cmd.getOptionValue("f", "."));
             root = new File(root.getCanonicalPath());
@@ -92,15 +90,15 @@ public class BitmapTester {
                 .longOpt("proxy")
                 .desc("Set proxy address, optional: <user> <password>")
                 .hasArgs()//.numberOfArgs(3)
-                .argName("address")
+                .argName("url")
                 .build()
         );
 
         options.addOption(Option.builder("s")
                 .longOpt("server")
-                .desc("Set custom server url")
+                .desc("Set Applitools server url")
                 .hasArg()
-                .argName("address")
+                .argName("url")
                 .build()
         );
 
@@ -138,6 +136,14 @@ public class BitmapTester {
                 .hasArg()
                 .argName("size")
                 .build());
+
+        options.addOption(Option.builder("lf")
+                .longOpt("logFile")
+                .desc("Specify Applitools log-file")
+                .hasArg()
+                .argName("file")
+                .build());
+
         return options;
     }
 }

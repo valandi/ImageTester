@@ -29,26 +29,20 @@ public class Test extends TestUnit {
     }
 
     public void run(Eyes eyes) {
-        String res = null;
-        Exception ex = null;
-        TestResults result = null;
-        try {
-            eyes.open(appname_, name(), viewportSize_);
-            for (ITestable step : steps_) {
+        eyes.open(appname_, name(), viewportSize_);
+        for (ITestable step : steps_) {
+            try {
                 step.run(eyes);
+            } catch (Throwable e) {
+                System.out.printf("Error in Step %s: \n %s \n This step will be skipped!", step.name(), e.getMessage());
+                e.printStackTrace();
             }
-            result = eyes.close(false);
-            res = result.isNew() ? "New" : (result.isPassed() ? "Passed" : "Failed");
-        } catch (IOException e) {
-            res = "Error";
-            ex = e;
-        } finally {
-            System.out.printf("\t[%s] - %s\n", res, name());
-            if (result != null && !result.isPassed() && !result.isNew())
-                System.out.printf("\tReview the result: %s\n", result.getUrl());
-            if (ex != null) ex.printStackTrace();
-            eyes.abortIfNotClosed();
         }
+        TestResults result = eyes.close(false);
+        String res = result.isNew() ? "New" : (result.isPassed() ? "Passed" : "Failed");
+        System.out.printf("\t[%s] - %s\n", res, name());
+        if (!result.isPassed() && !result.isNew())
+            System.out.printf("\tResult url: %s\n", result.getUrl());
     }
 
     public void addStep(ImageStep step) {
