@@ -19,20 +19,28 @@ public class BitmapTester {
             Eyes eyes = new Eyes();
 
             eyes.setAgentId("ImageTester on " + eyes.getAgentId());
+            //API key
             eyes.setApiKey(cmd.getOptionValue("k"));
+            // Applitools Server url
             if (cmd.hasOption("s")) eyes.setServerUrl(new URI(cmd.getOptionValue("s")));
+            // Match level
             if (cmd.hasOption("ml")) eyes.setMatchLevel(Utils.parseEnum(MatchLevel.class, cmd.getOptionValue("ml")));
+            // Proxy
             if (cmd.hasOption("p")) eyes.setProxy(new ProxySettings(cmd.getOptionValue("p")));
+            // Branch name
             if (cmd.hasOption("br")) eyes.setBranchName(cmd.getOptionValue("br"));
+            // Parent branch
             if (cmd.hasOption("pb")) eyes.setParentBranchName(cmd.getOptionValue("pb"));
-            if (cmd.hasOption("bn")) eyes.setBaselineName(cmd.getOptionValue("bn"));
+            // Baseline name
+            if (cmd.hasOption("bn")) eyes.setBaselineEnvName(cmd.getOptionValue("bn"));
+            // Parent branch
             if (cmd.hasOption("pb") && !cmd.hasOption("br"))
                 throw new ParseException("Parent Branches (pb) should be combined with branches (br).");
+            // Log file
             if (cmd.hasOption("lf")) eyes.setLogHandler(new FileLogger(cmd.getOptionValue("lf"), true, true));
-
-            File root = new File(cmd.getOptionValue("f", "."));
-            root = new File(root.getCanonicalPath());
-
+            // Set failed tests
+            eyes.setSaveFailedTests(cmd.hasOption("as"));
+            // Viewport size
             RectangleSize viewport = null;
             if (cmd.hasOption("vs")) {
                 String[] dims = cmd.getOptionValue("vs").split("x");
@@ -40,6 +48,9 @@ public class BitmapTester {
                     throw new ParseException("invalid viewport-size, make sure the call is -vs <width>x<height>");
                 viewport = new RectangleSize(Integer.parseInt(dims[0]), Integer.parseInt(dims[1]));
             }
+            // Folder path
+            File root = new File(cmd.getOptionValue("f", "."));
+            root = new File(root.getCanonicalPath());
 
             ITestable suite = Suite.build(root, cmd.getOptionValue("a", "ImageTester"), viewport);
 
@@ -142,6 +153,12 @@ public class BitmapTester {
                 .desc("Specify Applitools log-file")
                 .hasArg()
                 .argName("file")
+                .build());
+
+        options.addOption(Option.builder("as")
+                .longOpt("autoSave")
+                .desc("Automatically save failed tests. Waring, might save buggy baselines without human inspection. ")
+                .hasArg(false)
                 .build());
 
         return options;

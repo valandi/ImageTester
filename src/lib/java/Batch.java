@@ -6,16 +6,21 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class Batch extends TestUnit {
-    private Queue<Test> tests_;
+    private BatchInfo batch_;
+    private Queue<Test> tests_ = new LinkedList<Test>();
 
     protected Batch(File file) {
         super(file);
-        tests_ = new LinkedList<Test>();
     }
 
-    @Override
+    protected Batch(BatchInfo batch) {
+        super(batch.getName());
+        batch_ = batch;
+    }
+
     public void run(Eyes eyes) {
-        eyes.setBatch(new BatchInfo(name()));
+        batch_ = batch_ == null ? new BatchInfo(name()) : batch_;
+        eyes.setBatch(batch_);
         System.out.printf("Batch: %s\n", name());
         for (Test test : tests_) {
             test.run(eyes);

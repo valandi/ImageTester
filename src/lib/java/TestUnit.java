@@ -6,6 +6,7 @@ import java.nio.file.AccessDeniedException;
 
 public abstract class TestUnit implements ITestable {
     protected final File file_;
+    private String name_;
 
     protected TestUnit(File file) {
         file_ = file;
@@ -14,7 +15,12 @@ public abstract class TestUnit implements ITestable {
         }
     }
 
+    protected TestUnit(String name) {
+        file_ = null;
+        name_ = name;
+    }
+
     public String name() {
-        return file_.getName();
+        return file_ == null ? name_ : file_.getName();
     }
 }

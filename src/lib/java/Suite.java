@@ -1,3 +1,4 @@
+import com.applitools.eyes.BatchInfo;
 import com.applitools.eyes.Eyes;
 
 import java.io.File;
@@ -35,6 +36,25 @@ public class Suite extends TestUnit {
     }
 
     public static ITestable build(File curr, String appname, RectangleSize viewport) throws IOException {
+        String jenkinsJobName = System.getenv("JOB_NAME");
+        String jenkinsApplitoolsBatchId = System.getenv("APPLITOOLS_BATCH_ID");
+        Batch jenkinsBatch = null;
+
+        if ((jenkinsJobName != null) && (jenkinsApplitoolsBatchId != null)) {
+            BatchInfo batch = new BatchInfo(jenkinsJobName);
+            batch.setId(jenkinsApplitoolsBatchId);
+            jenkinsBatch = new Batch(batch);
+        }
+        ITestable unit = build(curr, appname, viewport, jenkinsBatch);
+        if (unit instanceof Test && jenkinsBatch != null) {
+            jenkinsBatch.addTest((Test) unit);
+            return jenkinsBatch;
+        } else {
+            return unit;
+        }
+    }
+
+    public static ITestable build(File curr, String appname, RectangleSize viewport, Batch flatBatch) throws IOException {
         if (!curr.exists()) {
             System.out.printf(String.format("The folder %s doesn't exists\n", curr.getAbsolutePath()));
             return null;
@@ -51,14 +71,14 @@ public class Suite extends TestUnit {
         }
 
         Test currTest = null;
-        Batch currBatch = null;
+        Batch currBatch = flatBatch;
         Suite currSuite = null;
 
         File[] files = curr.listFiles();
         Arrays.sort(files, NameFileComparator.NAME_COMPARATOR);
 
         for (File file : files) {
-            ITestable unit = build(file, appname, viewport);
+            ITestable unit = build(file, appname, viewport, flatBatch);
             if (unit instanceof ImageStep) {
                 if (currTest == null) currTest = new Test(curr, appname, viewport);
                 ImageStep step = (ImageStep) unit;
@@ -69,35 +89,41 @@ public class Suite extends TestUnit {
             } else if (unit instanceof Test) {
                 if (currBatch == null) currBatch = new Batch(curr);
                 currBatch.addTest((Test) unit);
-            } else if (unit instanceof Batch) {
-                if (currSuite == null) currSuite = new Suite(curr);
-                currSuite.batches_.add((Batch) unit);
-            } else if (unit instanceof Suite) {
-                Suite suite = (Suite) unit;
-                if (currSuite == null) currSuite = new Suite(curr);
-                currSuite.batches_.addAll(suite.batches_);
-                if (suite.test_ != null) {
-                    if (currBatch == null) currBatch = new Batch(curr);
-                    currBatch.addTest(suite.test_);
-                    suite.test_ = null;
+            } else if (flatBatch == null)
+                if (unit instanceof Batch) {
+                    if (currSuite == null) currSuite = new Suite(curr);
+                    currSuite.batches_.add((Batch) unit);
+                } else if (unit instanceof Suite) {
+                    Suite suite = (Suite) unit;
+                    if (currSuite == null) currSuite = new Suite(curr);
+                    currSuite.batches_.addAll(suite.batches_);
+                    if (suite.test_ != null) {
+                        if (currBatch == null) currBatch = new Batch(curr);
+                        currBatch.addTest(suite.test_);
+                        suite.test_ = null;
+                    }
+                    suite.batches_.clear();
+                } else {
+                    //SKIP
                 }
-                suite.batches_.clear();
-            } else {
-                //SKIP
-            }
         }
 
-        //Simple cases
-        if (currTest == null && currBatch == null && currSuite == null) return null;
-        if (currTest != null && currBatch == null && currSuite == null) return currTest;
-        if (currTest == null && currBatch != null && currSuite == null) return currBatch;
-        if (currTest == null && currBatch == null && currSuite != null) return currSuite;
-        //The complicated case
-        if (currSuite == null) currSuite = new Suite(curr);
-        if (currBatch != null) currSuite.batches_.add(currBatch);
-        if (currTest != null) currSuite.test_ = currTest;
+        if (flatBatch == null) {
+            //Simple cases
+            if (currTest == null && currBatch == null && currSuite == null) return null;
+            if (currTest != null && currBatch == null && currSuite == null) return currTest;
+            if (currTest == null && currBatch != null && currSuite == null) return currBatch;
+            if (currTest == null && currBatch == null && currSuite != null) return currSuite;
 
-        return currSuite;
+            //The complicated case
+            if (currSuite == null) currSuite = new Suite(curr);
+            if (currBatch != null) currSuite.batches_.add(currBatch);
+            if (currTest != null) currSuite.test_ = currTest;
+
+            return currSuite;
+        } else if (currTest != null) return currTest;
+
+        return currBatch;
     }
 
 
