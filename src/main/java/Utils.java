@@ -4,9 +4,6 @@ import org.apache.commons.cli.ParseException;
 
 import java.util.EnumSet;
 
-/**
- * Created by yanir on 18/04/2016.
- */
 public class Utils {
 
     public static <T extends Enum<T>> T parseEnum(Class<T> c, String string) throws ParseException {

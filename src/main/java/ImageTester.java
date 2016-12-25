@@ -7,7 +7,9 @@ import java.io.PrintStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class BitmapTester {
+public class ImageTester {
+    private static final String cur_ver = "0.0.7"; //TODO find more suitable place and logic
+
     public static void main(String[] args) {
         PrintStream out = System.out;
 
@@ -16,7 +18,12 @@ public class BitmapTester {
 
         try {
             CommandLine cmd = parser.parse(options, args);
-            Eyes eyes = new Eyes();
+            Eyes eyes = new Eyes() {
+                @Override
+                public String getBaseAgentId() {
+                    return String.format("ImageTester/%s [%s]", cur_ver, super.getBaseAgentId());
+                }
+            };
 
             eyes.setAgentId("ImageTester on " + eyes.getAgentId());
             //API key
@@ -38,6 +45,9 @@ public class BitmapTester {
                 throw new ParseException("Parent Branches (pb) should be combined with branches (br).");
             // Log file
             if (cmd.hasOption("lf")) eyes.setLogHandler(new FileLogger(cmd.getOptionValue("lf"), true, true));
+            //host os
+            if (cmd.hasOption("os")) eyes.setHostOS(cmd.getOptionValue("os", "Unknown"));
+
             // Set failed tests
             eyes.setSaveFailedTests(cmd.hasOption("as"));
             // Viewport size
@@ -161,6 +171,11 @@ public class BitmapTester {
                 .hasArg(false)
                 .build());
 
+        options.addOption(Option.builder("os")
+                .longOpt("hostOs")
+                .desc("Set OS identifier for the screens under test, default: Unknown")
+                .argName("os")
+                .build());
         return options;
     }
 }
