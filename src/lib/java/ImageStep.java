@@ -16,7 +16,14 @@ public class ImageStep extends TestUnit {
     }
 
     public void run(Eyes eyes) throws IOException {
-        eyes.checkImage(getImage(), name());
+        try {
+            eyes.checkImage(getImage(), name());
+        } catch (IOException e) {
+            System.out.printf("Failed to process image file: %s \n Reason: %s \n",
+                    file_,
+                    e.getMessage());
+            throw e;
+        }
     }
 
     public BufferedImage getImage() throws IOException {

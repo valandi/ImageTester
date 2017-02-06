@@ -4,6 +4,7 @@ import com.applitools.eyes.Eyes;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -35,96 +36,26 @@ public class Suite extends TestUnit {
         }
     }
 
-    public static ITestable build(File curr, String appname, RectangleSize viewport) throws IOException {
-        String jenkinsJobName = System.getenv("JOB_NAME");
-        String jenkinsApplitoolsBatchId = System.getenv("APPLITOOLS_BATCH_ID");
-        Batch jenkinsBatch = null;
-
-        if ((jenkinsJobName != null) && (jenkinsApplitoolsBatchId != null)) {
-            BatchInfo batch = new BatchInfo(jenkinsJobName);
-            batch.setId(jenkinsApplitoolsBatchId);
-            jenkinsBatch = new Batch(batch);
-        }
-        ITestable unit = build(curr, appname, viewport, jenkinsBatch);
-        if (unit instanceof Test && jenkinsBatch != null) {
-            jenkinsBatch.addTest((Test) unit);
-            return jenkinsBatch;
-        } else {
-            return unit;
-        }
+    public void addBatch(Batch batch) {
+        batches_.add(batch);
     }
 
-    public static ITestable build(File curr, String appname, RectangleSize viewport, Batch flatBatch) throws IOException {
-        if (!curr.exists()) {
-            System.out.printf(String.format("The folder %s doesn't exists\n", curr.getAbsolutePath()));
-            return null;
-        }
-
-        if (appname == null) {
-            appname = "ImageTester";
-        }
-
-        if (curr.isFile()) {
-            if (PDFTest.supports(curr)) return new PDFTest(curr, appname);
-            if (PostscriptTest.supports(curr)) return new PostscriptTest(curr, appname);
-            return ImageStep.supports(curr) ? new ImageStep(curr) : null;
-        }
-
-        Test currTest = null;
-        Batch currBatch = flatBatch;
-        Suite currSuite = null;
-
-        File[] files = curr.listFiles();
-        Arrays.sort(files, NameFileComparator.NAME_COMPARATOR);
-
-        for (File file : files) {
-            ITestable unit = build(file, appname, viewport, flatBatch);
-            if (unit instanceof ImageStep) {
-                if (currTest == null) currTest = new Test(curr, appname, viewport);
-                ImageStep step = (ImageStep) unit;
-                if (step.hasRegionFile())
-                    currTest.addSteps(step.getRegions());
-                else
-                    currTest.addStep(step);
-            } else if (unit instanceof Test) {
-                if (currBatch == null) currBatch = new Batch(curr);
-                currBatch.addTest((Test) unit);
-            } else if (flatBatch == null)
-                if (unit instanceof Batch) {
-                    if (currSuite == null) currSuite = new Suite(curr);
-                    currSuite.batches_.add((Batch) unit);
-                } else if (unit instanceof Suite) {
-                    Suite suite = (Suite) unit;
-                    if (currSuite == null) currSuite = new Suite(curr);
-                    currSuite.batches_.addAll(suite.batches_);
-                    if (suite.test_ != null) {
-                        if (currBatch == null) currBatch = new Batch(curr);
-                        currBatch.addTest(suite.test_);
-                        suite.test_ = null;
-                    }
-                    suite.batches_.clear();
-                } else {
-                    //SKIP
-                }
-        }
-
-        if (flatBatch == null) {
-            //Simple cases
-            if (currTest == null && currBatch == null && currSuite == null) return null;
-            if (currTest != null && currBatch == null && currSuite == null) return currTest;
-            if (currTest == null && currBatch != null && currSuite == null) return currBatch;
-            if (currTest == null && currBatch == null && currSuite != null) return currSuite;
-
-            //The complicated case
-            if (currSuite == null) currSuite = new Suite(curr);
-            if (currBatch != null) currSuite.batches_.add(currBatch);
-            if (currTest != null) currSuite.test_ = currTest;
-
-            return currSuite;
-        } else if (currTest != null) return currTest;
-
-        return currBatch;
+    public void portBatchesTo(Suite destination) {
+        destination.batches_.addAll(batches_);
+        batches_.clear();
     }
 
+    public void portTestTo(Batch destination) {
+        destination.addTest(test_);
+        test_ = null;
+    }
 
+    public boolean hasOrphanTest() {
+        return test_ != null;
+    }
+
+    public void setTest(Test test) {
+        if (test_ != null) throw new RuntimeException("test is not null as expected!");
+        test_ = test;
+    }
 }

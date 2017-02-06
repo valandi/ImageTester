@@ -33,7 +33,7 @@
         </dependency>
         <dependency>
             <groupId>com.applitools</groupId>
-            <artifactId>eyes-java</artifactId>
+            <artifactId>eyes-images-java</artifactId>
             <version>RELEASE</version>
         </dependency>
         <dependency>

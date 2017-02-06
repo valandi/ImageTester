@@ -1,5 +1,6 @@
 import com.applitools.eyes.*;
 import org.apache.commons.cli.*;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,11 +9,14 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class ImageTester {
-    private static final String cur_ver = "0.0.7"; //TODO find more suitable place and logic
+    private static final String cur_ver = "0.1.0"; //TODO find more suitable place and logic
+    private static final String eyes_utils = "EyesUtilities.jar";
+
+    private static boolean eyes_utils_enabled = false;
 
     public static void main(String[] args) {
         PrintStream out = System.out;
-
+        eyes_utils_enabled = new File(eyes_utils).exists();
         CommandLineParser parser = new DefaultParser();
         Options options = getOptions();
 
@@ -25,7 +29,6 @@ public class ImageTester {
                 }
             };
 
-            eyes.setAgentId("ImageTester on " + eyes.getAgentId());
             //API key
             eyes.setApiKey(cmd.getOptionValue("k"));
             // Applitools Server url
@@ -62,8 +65,21 @@ public class ImageTester {
             File root = new File(cmd.getOptionValue("f", "."));
             root = new File(root.getCanonicalPath());
 
-            ITestable suite = Suite.build(root, cmd.getOptionValue("a", "ImageTester"), viewport);
+            SuiteBuilder builder = new SuiteBuilder(root, cmd.getOptionValue("a", "ImageTester"), viewport);
 
+            if (eyes_utils_enabled) {
+                if (cmd.hasOption("gd") || cmd.hasOption("gi") || cmd.hasOption("gg")) {
+                    if (!cmd.hasOption("vk"))
+                        throw new ParseException("gd|gi|gg must be called with enterprise view-key (vk)");
+                    builder.setViewKey(cmd.getOptionValue("vk"));
+                    builder.setDestinationFolder(cmd.getOptionValue("of", "./"));
+                    builder.setDownloadDiffs(cmd.hasOption("gd"));
+                    builder.setGetImages(cmd.hasOption("gi"));
+                    builder.setGetGifs(cmd.hasOption("gg"));
+                }
+            }
+
+            ITestable suite = builder.build();
             if (suite == null) {
                 System.out.printf("Nothing to test!\n");
                 System.exit(0);
@@ -176,6 +192,45 @@ public class ImageTester {
                 .desc("Set OS identifier for the screens under test, default: Unknown")
                 .argName("os")
                 .build());
+
+        if (eyes_utils_enabled) {
+            System.out.printf("%s is integrated, extra features are available. \n", eyes_utils);
+            options.addOption(Option.builder("vk")
+                    .longOpt("viewKey")
+                    .desc("Specify enterprise view-key for additional api functions")
+                    .hasArg()
+                    .argName("key")
+                    .build()
+            );
+
+            options.addOption(Option.builder("of")
+                    .longOpt("outFolder")
+                    .desc("Specify the output target folder for the images results")
+                    .argName("folder")
+                    .build()
+            );
+
+            options.addOption(Option.builder("gd")
+                    .longOpt("getDiffs")
+                    .desc("Download diffs")
+                    .hasArg(false)
+                    .build()
+            );
+
+            options.addOption(Option.builder("gi")
+                    .longOpt("getImages")
+                    .desc("Download baseline and actual images")
+                    .hasArg(false)
+                    .build()
+            );
+
+            options.addOption(Option.builder("gg")
+                    .longOpt("getGifs")
+                    .desc("Download animated gif of the results")
+                    .hasArg(false)
+                    .build()
+            );
+        }
         return options;
     }
 }
