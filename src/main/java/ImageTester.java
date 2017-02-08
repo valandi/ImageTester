@@ -205,6 +205,7 @@ public class ImageTester {
 
             options.addOption(Option.builder("of")
                     .longOpt("outFolder")
+                    .hasArg()
                     .desc("Specify the output target folder for the images results")
                     .argName("folder")
                     .build()
