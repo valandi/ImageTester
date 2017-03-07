@@ -36,7 +36,16 @@ public class ImageTester {
             // Match level
             if (cmd.hasOption("ml")) eyes.setMatchLevel(Utils.parseEnum(MatchLevel.class, cmd.getOptionValue("ml")));
             // Proxy
-            if (cmd.hasOption("p")) eyes.setProxy(new ProxySettings(cmd.getOptionValue("p")));
+            if (cmd.hasOption("p")) {
+                String[] proxyops = cmd.getOptionValues("p");
+                if (proxyops.length == 1)
+                    eyes.setProxy(new ProxySettings(proxyops[0]));
+                else if (proxyops.length == 3) {
+                    eyes.setProxy(new ProxySettings(proxyops[0], proxyops[1], proxyops[2]));
+                } else
+                    throw new ParseException("Proxy setting are invalid");
+            }
+
             // Branch name
             if (cmd.hasOption("br")) eyes.setBranchName(cmd.getOptionValue("br"));
             // Parent branch
@@ -125,9 +134,11 @@ public class ImageTester {
 
         options.addOption(Option.builder("p")
                 .longOpt("proxy")
-                .desc("Set proxy address, optional: <user> <password>")
-                .hasArgs()//.numberOfArgs(3)
-                .argName("url")
+                .desc("Set proxy address")
+                .numberOfArgs(3)
+                .optionalArg(true)
+                .valueSeparator('|')
+                .argName("url [|user|password]")
                 .build()
         );
 
