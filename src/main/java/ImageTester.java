@@ -58,7 +58,9 @@ public class ImageTester {
             // Log file
             if (cmd.hasOption("lf")) eyes.setLogHandler(new FileLogger(cmd.getOptionValue("lf"), true, true));
             //host os
-            if (cmd.hasOption("os")) eyes.setHostOS(cmd.getOptionValue("os", "Unknown"));
+            if (cmd.hasOption("os")) eyes.setHostOS(cmd.getOptionValue("os"));
+            //host app
+            if (cmd.hasOption("ap")) eyes.setHostApp(cmd.getOptionValue("ap"));
 
             // Set failed tests
             eyes.setSaveFailedTests(cmd.hasOption("as"));
@@ -98,7 +100,7 @@ public class ImageTester {
         } catch (ParseException e) {
             out.println(e.getMessage());
             HelpFormatter formatter = new HelpFormatter();
-            formatter.printHelp("BitmapTester -k <api-key> [options]", options);
+            formatter.printHelp("ImageTester -k <api-key> [options]", options);
         } catch (URISyntaxException e) {
             e.printStackTrace();
             System.exit(-1);
@@ -137,8 +139,8 @@ public class ImageTester {
                 .desc("Set proxy address")
                 .numberOfArgs(3)
                 .optionalArg(true)
-                .valueSeparator('|')
-                .argName("url [|user|password]")
+                .valueSeparator(';')
+                .argName("url [;user;password]")
                 .build()
         );
 
@@ -200,8 +202,14 @@ public class ImageTester {
 
         options.addOption(Option.builder("os")
                 .longOpt("hostOs")
-                .desc("Set OS identifier for the screens under test, default: Unknown")
+                .desc("Set OS identifier for the screens under test")
                 .argName("os")
+                .build());
+
+        options.addOption(Option.builder("ap")
+                .longOpt("hostApp")
+                .desc("Set Host-app identifier for the screens under test")
+                .argName("app")
                 .build());
 
         if (eyes_utils_enabled) {
