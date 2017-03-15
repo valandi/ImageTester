@@ -13,7 +13,7 @@ Please make sure you signed up at [Applitools](applitools.com) and you have your
 # Example
 Running the tool on a set of images located in a certain path using terminal/cmd
 
-`\> java -jar BitmapTester -k <APIKEY> -f /path/to/folder/`
+`\> java -jar ImageTester -k <APIKEY> -f /path/to/folder/`
 
 # Supporting regions
 To validate only a specific regions of a particular image the folder must contain .regions file with the same name as the image.
