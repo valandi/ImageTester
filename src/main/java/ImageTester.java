@@ -78,6 +78,11 @@ public class ImageTester {
 
             SuiteBuilder builder = new SuiteBuilder(root, cmd.getOptionValue("a", "ImageTester"), viewport);
 
+            //DPI
+            if (cmd.hasOption("dpi")){
+                builder.setDpi(Float.valueOf(cmd.getOptionValue("dpi")));
+            }
+
             if (eyes_utils_enabled) {
                 if (cmd.hasOption("gd") || cmd.hasOption("gi") || cmd.hasOption("gg")) {
                     if (!cmd.hasOption("vk"))
@@ -211,6 +216,12 @@ public class ImageTester {
                 .desc("Set Host-app identifier for the screens under test")
                 .argName("app")
                 .build());
+        options.addOption(Option.builder("dpi")
+                .longOpt("DPI")
+                .desc("PDF conversion dots per inch parameter default value 300")
+                .hasArg().argName("Dpi")
+                .build());
+
 
         if (eyes_utils_enabled) {
             System.out.printf("%s is integrated, extra features are available. \n", eyes_utils);

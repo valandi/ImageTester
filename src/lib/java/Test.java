@@ -45,11 +45,7 @@ public class Test extends TestUnit {
         }
         try {
             TestResults result = eyes.close(false);
-
-            String res = result.isNew() ? "New" : (result.isPassed() ? "Passed" : "Failed");
-            System.out.printf("\t[%s] - %s\n", res, name());
-            if (!result.isPassed() && !result.isNew())
-                System.out.printf("\tResult url: %s\n", result.getUrl());
+            printTestResults(result);
             handleResultsDownload(result);
         } catch (EyesException e) {
             System.out.printf("Error closing test %s \nPath: %s \nReason: %s \n",
@@ -113,5 +109,14 @@ public class Test extends TestUnit {
 
     public void setGetGifs(boolean getGifs) {
         this.getGifs_ = getGifs;
+    }
+
+    protected void printTestResults(TestResults result){
+        String res = result.isNew() ? "New" : (result.isPassed() ? "Passed" : "Failed");
+        System.out.printf("\t[%s] - %s", res, name());
+        if (!result.isPassed() && !result.isNew())
+            System.out.printf("\tResult url: %s", result.getUrl());
+        System.out.println();
+
     }
 }

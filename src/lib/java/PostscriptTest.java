@@ -1,4 +1,5 @@
 import com.applitools.eyes.Eyes;
+import com.applitools.eyes.TestResults;
 import org.ghost4j.document.DocumentException;
 import org.ghost4j.document.PSDocument;
 import org.ghost4j.renderer.RendererException;
@@ -28,7 +29,8 @@ public class PostscriptTest extends Test {
         renderer.setResolution(300);
         Exception ex = null;
         String res = null;
-
+        TestResults result=null;
+        
         try {
             document.load(file_);
             List<Image> images = renderer.render(document);
@@ -41,7 +43,7 @@ public class PostscriptTest extends Test {
                 eyes.checkImage(image, String.format("Page-%s", page++));
             }
 
-            eyes.close();
+            result = eyes.close(false);
         } catch (FileNotFoundException e) {
             res = "Error";
             ex = e;
@@ -59,7 +61,7 @@ public class PostscriptTest extends Test {
             res = "Error";
             e.printStackTrace();
         } finally {
-            System.out.printf("\t[%s] - %s\n", res, name());
+            printTestResults(result);
             if (ex != null) ex.printStackTrace();
             eyes.abortIfNotClosed();
         }
