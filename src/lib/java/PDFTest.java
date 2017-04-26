@@ -14,7 +14,11 @@ public class PDFTest extends Test {
     private static final Pattern pattern = Patterns.PDF;
     private float dpi_;
     protected PDFTest(File file, String appname) {
+        this(file, appname, 300f);
+    }
+    protected PDFTest(File file, String appname, float dpi) {
         super(file, appname);
+        this.dpi_=dpi;
     }
 
     @Override

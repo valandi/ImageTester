@@ -72,8 +72,6 @@ public class Test extends TestUnit {
     private void handleResultsDownload(TestResults results) throws Exception {
         if (downloadDiffs_ || getGifs_ || getImages_) {
             if (viewKey_ == null) throw new RuntimeException("The view-key cannot be null");
-
-
             if (downloadDiffs_ && !results.isNew() && !results.isPassed())
                 new DownloadDiffs(results.getUrl(), destinationFolder_, viewKey_).run();
             if (getGifs_ && !results.isNew() && !results.isPassed())

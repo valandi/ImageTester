@@ -21,6 +21,7 @@ public class ImageTester {
         CommandLineParser parser = new DefaultParser();
         Options options = getOptions();
 
+        // This part disables log4j warnings
         org.apache.log4j.Logger.getRootLogger().setLevel(Level.OFF);
 
         try {
@@ -81,9 +82,8 @@ public class ImageTester {
             SuiteBuilder builder = new SuiteBuilder(root, cmd.getOptionValue("a", "ImageTester"), viewport);
 
             //DPI
-            if (cmd.hasOption("dpi")){
-                builder.setDpi(Float.valueOf(cmd.getOptionValue("dpi")));
-            }
+            builder.setDpi(Float.valueOf(cmd.getOptionValue("dpi", "300")));
+
 
             if (eyes_utils_enabled) {
                 if (cmd.hasOption("gd") || cmd.hasOption("gi") || cmd.hasOption("gg")) {
@@ -218,8 +218,8 @@ public class ImageTester {
                 .desc("Set Host-app identifier for the screens under test")
                 .argName("app")
                 .build());
-        options.addOption(Option.builder("dpi")
-                .longOpt("DPI")
+        options.addOption(Option.builder("di")
+                .longOpt("dpi")
                 .desc("PDF conversion dots per inch parameter default value 300")
                 .hasArg().argName("Dpi")
                 .build());

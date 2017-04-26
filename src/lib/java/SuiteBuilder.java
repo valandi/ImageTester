@@ -15,7 +15,7 @@ public class SuiteBuilder {
     private boolean downloadDiffs_;
     private boolean getImages_;
     private boolean getGifs_;
-    private float dpi_=300;
+    private float pdfdpi_;
 
     public SuiteBuilder(File rootFolder, String appname, RectangleSize viewport) {
         this.rootFolder_ = rootFolder;
@@ -27,13 +27,8 @@ public class SuiteBuilder {
         return build(rootFolder_, appname_, viewport_);
     }
 
-    public ITestable build(float dpi) throws IOException {
-
-        return build(rootFolder_, appname_, viewport_);
-    }
-
     public void setDpi(float dpi){
-        this.dpi_=dpi;
+        this.pdfdpi_ =dpi;
     }
     public void setViewKey(String viewKey) {
         this.viewKey_ = viewKey;
@@ -85,11 +80,7 @@ public class SuiteBuilder {
         }
 
         if (curr.isFile()) {
-            if (PDFTest.supports(curr)){
-                PDFTest pdfTest=new PDFTest(curr,appname_);
-                pdfTest.setDpi(dpi_);
-                return pdfTest;
-            }
+            if (PDFTest.supports(curr)) return new PDFTest(curr,appname_, pdfdpi_);
             if (PostscriptTest.supports(curr)) return new PostscriptTest(curr, appname);
             return ImageStep.supports(curr) ? new ImageStep(curr) : null;
         }
