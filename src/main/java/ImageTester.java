@@ -210,12 +210,14 @@ public class ImageTester {
         options.addOption(Option.builder("os")
                 .longOpt("hostOs")
                 .desc("Set OS identifier for the screens under test")
+                .hasArg()
                 .argName("os")
                 .build());
 
         options.addOption(Option.builder("ap")
                 .longOpt("hostApp")
                 .desc("Set Host-app identifier for the screens under test")
+                .hasArg()
                 .argName("app")
                 .build());
         options.addOption(Option.builder("di")
