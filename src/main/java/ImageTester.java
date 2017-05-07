@@ -1,6 +1,7 @@
 import com.applitools.eyes.*;
 import org.apache.commons.cli.*;
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +20,9 @@ public class ImageTester {
         eyes_utils_enabled = new File(eyes_utils).exists();
         CommandLineParser parser = new DefaultParser();
         Options options = getOptions();
+
+        // This part disables log4j warnings
+        org.apache.log4j.Logger.getRootLogger().setLevel(Level.OFF);
 
         try {
             CommandLine cmd = parser.parse(options, args);
@@ -61,7 +65,6 @@ public class ImageTester {
             if (cmd.hasOption("os")) eyes.setHostOS(cmd.getOptionValue("os"));
             //host app
             if (cmd.hasOption("ap")) eyes.setHostApp(cmd.getOptionValue("ap"));
-
             // Set failed tests
             eyes.setSaveFailedTests(cmd.hasOption("as"));
             // Viewport size
@@ -77,6 +80,10 @@ public class ImageTester {
             root = new File(root.getCanonicalPath());
 
             SuiteBuilder builder = new SuiteBuilder(root, cmd.getOptionValue("a", "ImageTester"), viewport);
+
+            //DPI
+            builder.setDpi(Float.valueOf(cmd.getOptionValue("dpi", "300")));
+
 
             if (eyes_utils_enabled) {
                 if (cmd.hasOption("gd") || cmd.hasOption("gi") || cmd.hasOption("gg")) {
@@ -203,14 +210,22 @@ public class ImageTester {
         options.addOption(Option.builder("os")
                 .longOpt("hostOs")
                 .desc("Set OS identifier for the screens under test")
+                .hasArg()
                 .argName("os")
                 .build());
 
         options.addOption(Option.builder("ap")
                 .longOpt("hostApp")
                 .desc("Set Host-app identifier for the screens under test")
+                .hasArg()
                 .argName("app")
                 .build());
+        options.addOption(Option.builder("di")
+                .longOpt("dpi")
+                .desc("PDF conversion dots per inch parameter default value 300")
+                .hasArg().argName("Dpi")
+                .build());
+
 
         if (eyes_utils_enabled) {
             System.out.printf("%s is integrated, extra features are available. \n", eyes_utils);

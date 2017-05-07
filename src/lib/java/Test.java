@@ -16,11 +16,11 @@ public class Test extends TestUnit {
     protected final String appname_;
     protected RectangleSize viewportSize_;
     private Queue<ITestable> steps_;
-    private String viewKey_;
-    private String destinationFolder_;
-    private boolean downloadDiffs_;
-    private boolean getImages_;
-    private boolean getGifs_;
+    protected String viewKey_;
+    protected String destinationFolder_;
+    protected boolean downloadDiffs_;
+    protected boolean getImages_;
+    protected boolean getGifs_;
 
     protected Test(File file, String appname) {
         this(file, appname, null);
@@ -45,11 +45,7 @@ public class Test extends TestUnit {
         }
         try {
             TestResults result = eyes.close(false);
-
-            String res = result.isNew() ? "New" : (result.isPassed() ? "Passed" : "Failed");
-            System.out.printf("\t[%s] - %s\n", res, name());
-            if (!result.isPassed() && !result.isNew())
-                System.out.printf("\tResult url: %s\n", result.getUrl());
+            printTestResults(result);
             handleResultsDownload(result);
         } catch (EyesException e) {
             System.out.printf("Error closing test %s \nPath: %s \nReason: %s \n",
@@ -73,11 +69,9 @@ public class Test extends TestUnit {
         }
     }
 
-    private void handleResultsDownload(TestResults results) throws Exception {
+    protected void handleResultsDownload(TestResults results) throws Exception {
         if (downloadDiffs_ || getGifs_ || getImages_) {
             if (viewKey_ == null) throw new RuntimeException("The view-key cannot be null");
-
-
             if (downloadDiffs_ && !results.isNew() && !results.isPassed())
                 new DownloadDiffs(results.getUrl(), destinationFolder_, viewKey_).run();
             if (getGifs_ && !results.isNew() && !results.isPassed())
@@ -113,5 +107,14 @@ public class Test extends TestUnit {
 
     public void setGetGifs(boolean getGifs) {
         this.getGifs_ = getGifs;
+    }
+
+    protected void printTestResults(TestResults result){
+        String res = result.isNew() ? "New" : (result.isPassed() ? "Passed" : "Failed");
+        System.out.printf("\t[%s] - %s", res, name());
+        if (!result.isPassed() && !result.isNew())
+            System.out.printf("\tResult url: %s", result.getUrl());
+        System.out.println();
+
     }
 }
