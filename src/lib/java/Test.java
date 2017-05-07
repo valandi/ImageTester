@@ -16,11 +16,11 @@ public class Test extends TestUnit {
     protected final String appname_;
     protected RectangleSize viewportSize_;
     private Queue<ITestable> steps_;
-    private String viewKey_;
-    private String destinationFolder_;
-    private boolean downloadDiffs_;
-    private boolean getImages_;
-    private boolean getGifs_;
+    protected String viewKey_;
+    protected String destinationFolder_;
+    protected boolean downloadDiffs_;
+    protected boolean getImages_;
+    protected boolean getGifs_;
 
     protected Test(File file, String appname) {
         this(file, appname, null);
@@ -69,7 +69,7 @@ public class Test extends TestUnit {
         }
     }
 
-    private void handleResultsDownload(TestResults results) throws Exception {
+    protected void handleResultsDownload(TestResults results) throws Exception {
         if (downloadDiffs_ || getGifs_ || getImages_) {
             if (viewKey_ == null) throw new RuntimeException("The view-key cannot be null");
             if (downloadDiffs_ && !results.isNew() && !results.isPassed())

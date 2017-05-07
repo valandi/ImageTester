@@ -37,11 +37,16 @@ public class PDFTest extends Test {
             }
             result = eyes.close(false);
             printTestResults(result);
+            handleResultsDownload(result);
             document.close();
         } catch (IOException e) {
             ex = e;
             System.out.printf("Error closing test %s \nPath: %s \nReason: %s \n",e.getMessage());
 
+        } catch (Exception e) {
+            System.out.println("Oops, something went wrong!");
+            System.out.print(e);
+            e.printStackTrace();
         } finally {
             if (ex != null) ex.printStackTrace();
             eyes.abortIfNotClosed();

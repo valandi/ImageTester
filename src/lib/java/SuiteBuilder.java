@@ -1,7 +1,6 @@
 import com.applitools.eyes.BatchInfo;
 import com.applitools.eyes.RectangleSize;
 import org.apache.commons.io.comparator.NameFileComparator;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -80,8 +79,16 @@ public class SuiteBuilder {
         }
 
         if (curr.isFile()) {
-            if (PDFTest.supports(curr)) return new PDFTest(curr,appname_, pdfdpi_);
-            if (PostscriptTest.supports(curr)) return new PostscriptTest(curr, appname);
+            if (PDFTest.supports(curr)) {
+                PDFTest pdftest= new PDFTest(curr, appname_, pdfdpi_);
+                setEyesUtilitisParams(pdftest);
+                return pdftest;
+            }
+            if (PostscriptTest.supports(curr)) {
+                PostscriptTest postScriptest= new PostscriptTest(curr, appname);
+                setEyesUtilitisParams(postScriptest);
+                return postScriptest;
+            }
             return ImageStep.supports(curr) ? new ImageStep(curr) : null;
         }
 
@@ -96,11 +103,7 @@ public class SuiteBuilder {
             ITestable unit = build(file, appname, viewport, flatBatch);
             if (unit instanceof ImageStep) {
                 if (currTest == null) currTest = new Test(curr, appname, viewport);
-                currTest.setViewKey(viewKey_);
-                currTest.setDestinationFolder(destinationFolder_);
-                currTest.setDownloadDiffs(downloadDiffs_);
-                currTest.setGetImages(getImages_);
-                currTest.setGetGifs(getGifs_);
+                setEyesUtilitisParams(currTest);
                 ImageStep step = (ImageStep) unit;
                 if (step.hasRegionFile())
                     currTest.addSteps(step.getRegions());
@@ -144,5 +147,12 @@ public class SuiteBuilder {
 
         return currBatch;
     }
+    private void setEyesUtilitisParams(Test currTest){
+        currTest.setViewKey(viewKey_);
+        currTest.setDestinationFolder(destinationFolder_);
+        currTest.setDownloadDiffs(downloadDiffs_);
+        currTest.setGetImages(getImages_);
+        currTest.setGetGifs(getGifs_);
 
+    }
 }
