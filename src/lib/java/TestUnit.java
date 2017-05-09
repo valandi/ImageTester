@@ -1,8 +1,4 @@
-import com.applitools.eyes.Eyes;
-
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.AccessDeniedException;
 
 public abstract class TestUnit implements ITestable {
     protected final File file_;

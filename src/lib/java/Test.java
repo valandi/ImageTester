@@ -16,11 +16,7 @@ public class Test extends TestUnit {
     protected final String appname_;
     protected RectangleSize viewportSize_;
     private Queue<ITestable> steps_;
-    protected String viewKey_;
-    protected String destinationFolder_;
-    protected boolean downloadDiffs_;
-    protected boolean getImages_;
-    protected boolean getGifs_;
+    private EyesUtilitiesConfig eyesUtilitiesConfig_;
 
     protected Test(File file, String appname) {
         this(file, appname, null);
@@ -70,14 +66,14 @@ public class Test extends TestUnit {
     }
 
     protected void handleResultsDownload(TestResults results) throws Exception {
-        if (downloadDiffs_ || getGifs_ || getImages_) {
-            if (viewKey_ == null) throw new RuntimeException("The view-key cannot be null");
-            if (downloadDiffs_ && !results.isNew() && !results.isPassed())
-                new DownloadDiffs(results.getUrl(), destinationFolder_, viewKey_).run();
-            if (getGifs_ && !results.isNew() && !results.isPassed())
-                new AnimatedDiffs(results.getUrl(), destinationFolder_, viewKey_).run();
-            if (getImages_)
-                new DownloadImages(results.getUrl(), destinationFolder_, viewKey_, false, false).run();
+        if (eyesUtilitiesConfig_.getDownloadDiffs() || eyesUtilitiesConfig_.getGetGifs() || eyesUtilitiesConfig_.getGetImages()) {
+            if (eyesUtilitiesConfig_.getViewKey() == null) throw new RuntimeException("The view-key cannot be null");
+            if (eyesUtilitiesConfig_.getDownloadDiffs() && !results.isNew() && !results.isPassed())
+                new DownloadDiffs(results.getUrl(), eyesUtilitiesConfig_.getDestinationFolder(), eyesUtilitiesConfig_.getViewKey()).run();
+            if (eyesUtilitiesConfig_.getGetGifs() && !results.isNew() && !results.isPassed())
+                new AnimatedDiffs(results.getUrl(), eyesUtilitiesConfig_.getDestinationFolder(), eyesUtilitiesConfig_.getViewKey()).run();
+            if (eyesUtilitiesConfig_.getGetImages())
+                new DownloadImages(results.getUrl(), eyesUtilitiesConfig_.getDestinationFolder(), eyesUtilitiesConfig_.getViewKey(), false, false).run();
         }
     }
 
@@ -89,26 +85,6 @@ public class Test extends TestUnit {
         steps_.addAll(steps);
     }
 
-    public void setViewKey(String viewKey) {
-        this.viewKey_ = viewKey;
-    }
-
-    public void setDestinationFolder(String destinationFolder) {
-        this.destinationFolder_ = destinationFolder;
-    }
-
-    public void setDownloadDiffs(boolean downloadDiffs) {
-        this.downloadDiffs_ = downloadDiffs;
-    }
-
-    public void setGetImages(boolean getImages) {
-        this.getImages_ = getImages;
-    }
-
-    public void setGetGifs(boolean getGifs) {
-        this.getGifs_ = getGifs;
-    }
-
     protected void printTestResults(TestResults result){
         String res = result.isNew() ? "New" : (result.isPassed() ? "Passed" : "Failed");
         System.out.printf("\t[%s] - %s", res, name());
@@ -117,4 +93,11 @@ public class Test extends TestUnit {
         System.out.println();
 
     }
+
+    public void setEyesUtilitiesConfig(EyesUtilitiesConfig eyesUtilitiesConfig){
+        eyesUtilitiesConfig_=eyesUtilitiesConfig;
+    }
+
+
+
 }
