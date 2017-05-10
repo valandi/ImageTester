@@ -10,7 +10,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class ImageTester {
-    private static final String cur_ver = "0.1.0"; //TODO find more suitable place and logic
+    private static final String cur_ver = "0.1.2"; //TODO find more suitable place and logic
     private static final String eyes_utils = "EyesUtilities.jar";
 
     private static boolean eyes_utils_enabled = false;
