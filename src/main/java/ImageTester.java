@@ -85,17 +85,8 @@ public class ImageTester {
             builder.setDpi(Float.valueOf(cmd.getOptionValue("dpi", "300")));
 
 
-            if (eyes_utils_enabled) {
-                if (cmd.hasOption("gd") || cmd.hasOption("gi") || cmd.hasOption("gg")) {
-                    if (!cmd.hasOption("vk"))
-                        throw new ParseException("gd|gi|gg must be called with enterprise view-key (vk)");
-                    builder.setViewKey(cmd.getOptionValue("vk"));
-                    builder.setDestinationFolder(cmd.getOptionValue("of", "./"));
-                    builder.setDownloadDiffs(cmd.hasOption("gd"));
-                    builder.setGetImages(cmd.hasOption("gi"));
-                    builder.setGetGifs(cmd.hasOption("gg"));
-                }
-            }
+            if (eyes_utils_enabled) builder.setEyesUtilitiesConfig(new EyesUtilitiesConfig(cmd));
+
 
             ITestable suite = builder.build();
             if (suite == null) {
