@@ -8,9 +8,9 @@ public class EyesUtilitiesConfig {
 
     private String viewKey_;
     private String destinationFolder_;
-    private Boolean downloadDiffs_;
-    private Boolean getImages_;
-    private Boolean getGifs_;
+    private Boolean downloadDiffs_=false;
+    private Boolean getImages_=false;
+    private Boolean getGifs_=false;
 
 
     public EyesUtilitiesConfig(String viewKey, String destinationFolder ,Boolean downloadDiffs, Boolean getImages, Boolean getGifs) {
