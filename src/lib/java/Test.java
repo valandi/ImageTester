@@ -9,6 +9,7 @@ import com.applitools.eyes.TestResults;
 import java.io.File;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class Test extends TestUnit {
@@ -17,6 +18,17 @@ public class Test extends TestUnit {
     protected RectangleSize viewportSize_;
     private Queue<ITestable> steps_;
     private EyesUtilitiesConfig eyesUtilitiesConfig_;
+    private List<Integer> pagesToInclude_;
+
+    public List<Integer> getPagesToInclude() {
+        return pagesToInclude_;
+    }
+
+    public void setPagesToInclude(List<Integer> pagesToInclude) {
+        this.pagesToInclude_ = pagesToInclude;
+    }
+
+
 
     protected Test(File file, String appname) {
         this(file, appname, null);
@@ -86,7 +98,7 @@ public class Test extends TestUnit {
     }
 
     protected void printTestResults(TestResults result){
-        String res = result.isNew() ? "New" : (result.isPassed() ? "Passed" : "Failed");
+        String res = result.getSteps()>0 ? (result.isNew() ? "New" : (result.isPassed() ? "Passed" : "Failed")) : "Empty";
         System.out.printf("\t[%s] - %s", res, name());
         if (!result.isPassed() && !result.isNew())
             System.out.printf("\tResult url: %s", result.getUrl());

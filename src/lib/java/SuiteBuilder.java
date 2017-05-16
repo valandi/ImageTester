@@ -4,6 +4,7 @@ import org.apache.commons.io.comparator.NameFileComparator;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 public class SuiteBuilder {
     private File rootFolder_;
@@ -11,6 +12,16 @@ public class SuiteBuilder {
     private RectangleSize viewport_;
     private EyesUtilitiesConfig eyesUtilitiesConfig_;
     private float pdfdpi_;
+    private String pdfPassword_;
+    private List<Integer> steps;
+
+    public List<Integer> getSteps() {
+        return steps;
+    }
+
+    public void setSteps(List<Integer> steps) {
+        this.steps = steps;
+    }
 
     public EyesUtilitiesConfig getEyesUtilitiesConfig() {
         return eyesUtilitiesConfig_;
@@ -68,6 +79,8 @@ public class SuiteBuilder {
             if (PDFTest.supports(curr)) {
                 PDFTest pdftest= new PDFTest(curr, appname_, pdfdpi_);
                 pdftest.setEyesUtilitiesConfig(eyesUtilitiesConfig_);
+                pdftest.setPagesToInclude(steps);
+                pdftest.setPdfPassword(pdfPassword_);
                 return pdftest;
             }
             if (PostscriptTest.supports(curr)) {
@@ -132,5 +145,13 @@ public class SuiteBuilder {
             return currTest;
 
         return currBatch;
+    }
+
+    public String getPdfPassword() {
+        return pdfPassword_;
+    }
+
+    public void setPdfPassword(String pdfPassword) {
+        this.pdfPassword_ = pdfPassword;
     }
 }
