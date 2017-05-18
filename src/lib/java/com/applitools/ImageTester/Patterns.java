@@ -1,3 +1,5 @@
+package com.applitools.ImageTester;
+
 import java.util.regex.Pattern;
 
 /**

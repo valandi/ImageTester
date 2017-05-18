@@ -1,6 +1,7 @@
+package com.applitools.ImageTester;
+
 import com.applitools.eyes.Eyes;
 import com.applitools.eyes.Region;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.opencsv.CSVReader;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;

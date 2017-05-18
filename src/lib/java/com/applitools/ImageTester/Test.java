@@ -1,3 +1,5 @@
+package com.applitools.ImageTester;
+
 import com.applitools.Commands.AnimatedDiffs;
 import com.applitools.Commands.DownloadDiffs;
 import com.applitools.Commands.DownloadImages;

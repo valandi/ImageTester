@@ -1,3 +1,5 @@
+package com.applitools.ImageTester;
+
 import com.applitools.eyes.BatchInfo;
 import com.applitools.eyes.Eyes;
 
@@ -21,7 +23,7 @@ public class Batch extends TestUnit {
     public void run(Eyes eyes) {
         batch_ = batch_ == null ? new BatchInfo(name()) : batch_;
         eyes.setBatch(batch_);
-        System.out.printf("Batch: %s\n", name());
+        System.out.printf("com.applitools.com.applitools.ImageTester.ImageTester.Batch: %s\n", name());
         for (Test test : tests_) {
             test.run(eyes);
         }

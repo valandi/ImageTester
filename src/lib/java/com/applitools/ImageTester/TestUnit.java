@@ -1,3 +1,5 @@
+package com.applitools.ImageTester;
+
 import java.io.File;
 
 public abstract class TestUnit implements ITestable {

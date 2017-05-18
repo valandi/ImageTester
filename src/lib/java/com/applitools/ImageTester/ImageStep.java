@@ -1,3 +1,5 @@
+package com.applitools.ImageTester;
+
 import com.applitools.eyes.Eyes;
 
 import javax.imageio.ImageIO;

@@ -1,3 +1,5 @@
+package com.applitools.ImageTester;
+
 import com.applitools.eyes.Eyes;
 import com.applitools.eyes.TestResults;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -33,7 +35,7 @@ public class PDFTest extends Test {
             eyes.open(appname_, name());
 
             for (int page = 0; page < document.getNumberOfPages(); ++page) {
-                if (this.getPagesToInclude().contains(page+1))
+                if ((this.getPagesToInclude()==null)||(this.getPagesToInclude().contains(page+1)))
                 {
                     BufferedImage bim = pdfRenderer.renderImageWithDPI(page, dpi_);
                     eyes.checkImage(bim, String.format("Page-%s", page));

@@ -1,6 +1,7 @@
+package com.applitools.ImageTester;
+
 import com.applitools.eyes.*;
 import org.apache.commons.cli.*;
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.*;
 
 import java.io.File;
@@ -31,7 +32,7 @@ public class ImageTester {
             Eyes eyes = new Eyes() {
                 @Override
                 public String getBaseAgentId() {
-                    return String.format("ImageTester/%s [%s]", cur_ver, super.getBaseAgentId());
+                    return String.format("com.applitools.ImageTester.ImageTester/%s [%s]", cur_ver, super.getBaseAgentId());
                 }
             };
 
@@ -81,7 +82,7 @@ public class ImageTester {
             File root = new File(cmd.getOptionValue("f", "."));
             root = new File(root.getCanonicalPath());
 
-            SuiteBuilder builder = new SuiteBuilder(root, cmd.getOptionValue("a", "ImageTester"), viewport);
+            SuiteBuilder builder = new SuiteBuilder(root, cmd.getOptionValue("a", "com.applitools.ImageTester.ImageTester"), viewport);
 
             //DPI
             builder.setDpi(Float.valueOf(cmd.getOptionValue("dpi", "300")));
@@ -107,7 +108,7 @@ public class ImageTester {
         } catch (ParseException e) {
             out.println(e.getMessage());
             HelpFormatter formatter = new HelpFormatter();
-            formatter.printHelp("ImageTester -k <api-key> [options]", options);
+            formatter.printHelp("com.applitools.ImageTester.ImageTester -k <api-key> [options]", options);
         } catch (URISyntaxException e) {
             e.printStackTrace();
             System.exit(-1);
@@ -129,7 +130,7 @@ public class ImageTester {
 
         options.addOption(Option.builder("a")
                 .longOpt("AppName")
-                .desc("Set own application name, default: ImageTester")
+                .desc("Set own application name, default: com.applitools.ImageTester.ImageTester")
                 .hasArg().argName("name")
                 .build()
         );

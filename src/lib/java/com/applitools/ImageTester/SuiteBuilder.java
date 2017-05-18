@@ -1,3 +1,5 @@
+package com.applitools.ImageTester;
+
 import com.applitools.eyes.BatchInfo;
 import com.applitools.eyes.RectangleSize;
 import org.apache.commons.io.comparator.NameFileComparator;
@@ -72,7 +74,7 @@ public class SuiteBuilder {
         }
 
         if (appname == null) {
-            appname = "ImageTester";
+            appname = "com.applitools.ImageTester.ImageTester";
         }
 
         if (curr.isFile()) {

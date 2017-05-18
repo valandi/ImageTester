@@ -1,3 +1,5 @@
+package com.applitools.ImageTester;
+
 import com.applitools.eyes.Eyes;
 import com.applitools.eyes.TestResults;
 import org.ghost4j.document.DocumentException;
