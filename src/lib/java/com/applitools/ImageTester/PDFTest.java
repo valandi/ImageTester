@@ -7,6 +7,8 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -16,6 +18,14 @@ public class PDFTest extends Test {
     private static final Pattern pattern = Patterns.PDF;
     private float dpi_;
     private String pdfPassword;
+    private List<Integer> pagesList_;
+    private String pages_;
+
+    public void setPages(String pages) throws IOException {
+        this.pages_ = pages;
+        this.pagesList_= setPagesList(pages);
+    }
+
     protected PDFTest(File file, String appname) {
         this(file, appname, 300f);
     }
@@ -34,12 +44,9 @@ public class PDFTest extends Test {
             PDFRenderer pdfRenderer = new PDFRenderer(document);
             eyes.open(appname_, name());
 
-            for (int page = 0; page < document.getNumberOfPages(); ++page) {
-                if ((this.getPagesToInclude()==null)||(this.getPagesToInclude().contains(page+1)))
-                {
-                    BufferedImage bim = pdfRenderer.renderImageWithDPI(page, dpi_);
-                    eyes.checkImage(bim, String.format("Page-%s", page));
-                }
+            for (int i =0;i<pagesList_.size();i++){
+                BufferedImage bim = pdfRenderer.renderImageWithDPI(i, dpi_);
+                eyes.checkImage(bim, String.format("Page-%s", pagesList_.get(i)));
             }
             result = eyes.close(false);
             printTestResults(result);
@@ -70,4 +77,26 @@ public class PDFTest extends Test {
     public String getPdfPassword() {return pdfPassword;}
 
     public void setPdfPassword(String pdfPassword) {this.pdfPassword = pdfPassword;}
+
+    public List<Integer> setPagesList(String pages) throws IOException {
+        if (pages != null) return parsePagesToList(pages);
+        else{
+            PDDocument document = PDDocument.load(this.file_,this.pdfPassword);
+            PDFRenderer pdfRenderer = new PDFRenderer(document);
+            ArrayList<Integer> list = new ArrayList<Integer>();
+            for (int page = 0; page < document.getNumberOfPages(); ++page) {
+                list.add(page+1);
+            }
+            return list;
+        }
+    }
+
+    public String name() {
+        String pagesText="";
+        if (pages_ !=null) pagesText=" pages ["+pages_+"]";
+
+        return file_ == null ? name_ +pagesText: file_.getName()+pagesText;
+    }
+
+
 }

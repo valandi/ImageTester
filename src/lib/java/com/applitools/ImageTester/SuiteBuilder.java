@@ -6,7 +6,6 @@ import org.apache.commons.io.comparator.NameFileComparator;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 
 public class SuiteBuilder {
     private File rootFolder_;
@@ -15,14 +14,14 @@ public class SuiteBuilder {
     private EyesUtilitiesConfig eyesUtilitiesConfig_;
     private float pdfdpi_;
     private String pdfPassword_;
-    private List<Integer> steps;
+    private String pages_;
 
-    public List<Integer> getSteps() {
-        return steps;
+    public String getPages() {
+        return pages_;
     }
 
-    public void setSteps(List<Integer> steps) {
-        this.steps = steps;
+    public void setPages(String steps) {
+        this.pages_ = steps;
     }
 
     public EyesUtilitiesConfig getEyesUtilitiesConfig() {
@@ -74,14 +73,14 @@ public class SuiteBuilder {
         }
 
         if (appname == null) {
-            appname = "com.applitools.ImageTester.ImageTester";
+            appname = "ImageTester";
         }
 
         if (curr.isFile()) {
             if (PDFTest.supports(curr)) {
                 PDFTest pdftest= new PDFTest(curr, appname_, pdfdpi_);
                 pdftest.setEyesUtilitiesConfig(eyesUtilitiesConfig_);
-                pdftest.setPagesToInclude(steps);
+                pdftest.setPages(pages_);
                 pdftest.setPdfPassword(pdfPassword_);
                 return pdftest;
             }

@@ -9,10 +9,7 @@ import com.applitools.eyes.RectangleSize;
 import com.applitools.eyes.TestResults;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class Test extends TestUnit {
 
@@ -20,15 +17,8 @@ public class Test extends TestUnit {
     protected RectangleSize viewportSize_;
     private Queue<ITestable> steps_;
     private EyesUtilitiesConfig eyesUtilitiesConfig_;
-    private List<Integer> pagesToInclude_;
 
-    public List<Integer> getPagesToInclude() {
-        return pagesToInclude_;
-    }
 
-    public void setPagesToInclude(List<Integer> pagesToInclude) {
-        this.pagesToInclude_ = pagesToInclude;
-    }
 
 
 
@@ -112,6 +102,30 @@ public class Test extends TestUnit {
         eyesUtilitiesConfig_=eyesUtilitiesConfig;
     }
 
+    protected static List<Integer> parsePagesToList(String input) {
+        if (input==null) return null;
+        ArrayList<Integer> pagesToInclude = new ArrayList<Integer>();
+        String[] inputPages = input.split(",");
+        for (int i = 0; i < inputPages.length; i++) {
+            if (inputPages[i].contains("-")) {
+                int left = Integer.valueOf(inputPages[i].split("-")[0]);
+                int right = Integer.valueOf(inputPages[i].split("-")[1]);
+                if (left <= right) {
+                    for (int j = left; j <= right; j++) {
+                        pagesToInclude.add(j);
+                    }
+                } else {
+                    for (int j = left; j >= right; j--) {
+                        pagesToInclude.add(j);
+                    }
+                }
+            } else {
+                pagesToInclude.add(Integer.valueOf(inputPages[i]));
+            }
+        }
+        return pagesToInclude;
+
+    }
 
 
 }

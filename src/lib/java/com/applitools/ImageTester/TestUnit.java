@@ -4,7 +4,7 @@ import java.io.File;
 
 public abstract class TestUnit implements ITestable {
     protected final File file_;
-    private String name_;
+    protected String name_;
 
     protected TestUnit(File file) {
         file_ = file;

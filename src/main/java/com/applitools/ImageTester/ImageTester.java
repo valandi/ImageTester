@@ -9,11 +9,9 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ImageTester {
-    private static final String cur_ver = "0.2.0"; //TODO find more suitable place and logic
+    private static final String cur_ver = "0.2.1"; //TODO find more suitable place and logic
     private static final String eyes_utils = "EyesUtilities.jar";
 
     private static boolean eyes_utils_enabled = false;
@@ -32,7 +30,7 @@ public class ImageTester {
             Eyes eyes = new Eyes() {
                 @Override
                 public String getBaseAgentId() {
-                    return String.format("com.applitools.ImageTester.ImageTester/%s [%s]", cur_ver, super.getBaseAgentId());
+                    return String.format("ImageTester/%s [%s]", cur_ver, super.getBaseAgentId());
                 }
             };
 
@@ -82,16 +80,16 @@ public class ImageTester {
             File root = new File(cmd.getOptionValue("f", "."));
             root = new File(root.getCanonicalPath());
 
-            SuiteBuilder builder = new SuiteBuilder(root, cmd.getOptionValue("a", "com.applitools.ImageTester.ImageTester"), viewport);
+            SuiteBuilder builder = new SuiteBuilder(root, cmd.getOptionValue("a", "ImageTester"), viewport);
 
             //DPI
             builder.setDpi(Float.valueOf(cmd.getOptionValue("dpi", "300")));
 
             // Determine Pages to include
-            if (cmd.hasOption("sp")) builder.setSteps(getListOfPages(cmd.getOptionValue("sp")));
+            if (cmd.hasOption("sp")) builder.setPages(cmd.getOptionValue("sp"));
 
             // Read PDF Password
-            if (cmd.hasOption("sp")) builder.setPdfPassword(cmd.getOptionValue("pp"));
+            if (cmd.hasOption("pp")) builder.setPdfPassword(cmd.getOptionValue("pp"));
 
 
 
@@ -108,7 +106,7 @@ public class ImageTester {
         } catch (ParseException e) {
             out.println(e.getMessage());
             HelpFormatter formatter = new HelpFormatter();
-            formatter.printHelp("com.applitools.ImageTester.ImageTester -k <api-key> [options]", options);
+            formatter.printHelp("ImageTester -k <api-key> [options]", options);
         } catch (URISyntaxException e) {
             e.printStackTrace();
             System.exit(-1);
@@ -130,15 +128,17 @@ public class ImageTester {
 
         options.addOption(Option.builder("a")
                 .longOpt("AppName")
-                .desc("Set own application name, default: com.applitools.ImageTester.ImageTester")
-                .hasArg().argName("name")
+                .desc("Set own application name, default: ImageTester")
+                .hasArg()
+                .argName("name")
                 .build()
         );
 
         options.addOption(Option.builder("f")
                 .longOpt("folder")
                 .desc("Set the root folder to start the analysis, default: \\.")
-                .hasArg().argName("path")
+                .hasArg()
+                .argName("path")
                 .build()
         );
 
@@ -224,17 +224,20 @@ public class ImageTester {
         options.addOption(Option.builder("di")
                 .longOpt("dpi")
                 .desc("PDF conversion dots per inch parameter default value 300")
-                .hasArg().argName("Dpi")
+                .hasArg()
+                .argName("Dpi")
                 .build());
         options.addOption(Option.builder("sp")
-                .longOpt("selectPages")
+                .longOpt("selectedPages")
                 .desc("PDF pages to select")
-                .hasArg().argName("SP")
+                .hasArg()
+                .argName("Pages")
                 .build());
         options.addOption(Option.builder("pp")
                 .longOpt("PDFPassword")
                 .desc("PDF Password")
-                .hasArg().argName("PP")
+                .hasArg()
+                .argName("Password")
                 .build());
 
 
@@ -278,22 +281,5 @@ public class ImageTester {
             );
         }
         return options;
-    }
-
-    private static List<Integer> getListOfPages(String input) {
-        ArrayList<Integer> pagesToInclude = new ArrayList<Integer>();
-        String[] inputPages = input.split(",");
-        for (int i = 0; i < inputPages.length; i++) {
-            if (inputPages[i].contains("-")) {
-                int begin = Integer.valueOf(inputPages[i].split("-")[0]);
-                int stop = Integer.valueOf(inputPages[i].split("-")[1]);
-                for (int j = begin; j <= stop; j++) {
-                    pagesToInclude.add(j);
-                }
-            } else {
-                pagesToInclude.add(Integer.valueOf(inputPages[i]));
-            }
-        }
-        return pagesToInclude;
     }
 }
