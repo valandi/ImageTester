@@ -45,7 +45,7 @@ public class PDFTest extends Test {
             eyes.open(appname_, name());
 
             for (int i =0;i<pagesList_.size();i++){
-                BufferedImage bim = pdfRenderer.renderImageWithDPI(i, dpi_);
+                BufferedImage bim = pdfRenderer.renderImageWithDPI(pagesList_.get(i)-1, dpi_);
                 eyes.checkImage(bim, String.format("Page-%s", pagesList_.get(i)));
             }
             result = eyes.close(false);
@@ -91,6 +91,7 @@ public class PDFTest extends Test {
         }
     }
 
+    @Override
     public String name() {
         String pagesText="";
         if (pages_ !=null) pagesText=" pages ["+pages_+"]";
