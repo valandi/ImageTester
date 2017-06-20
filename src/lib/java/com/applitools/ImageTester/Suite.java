@@ -1,15 +1,11 @@
-import com.applitools.eyes.BatchInfo;
+package com.applitools.ImageTester;
+
 import com.applitools.eyes.Eyes;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Queue;
-
-import com.applitools.eyes.RectangleSize;
-import org.apache.commons.io.comparator.*;
 
 public class Suite extends TestUnit {
     private Queue<Batch> batches_;

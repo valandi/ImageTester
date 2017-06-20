@@ -1,6 +1,7 @@
+package com.applitools.ImageTester;
+
 import com.applitools.eyes.*;
 import org.apache.commons.cli.*;
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.*;
 
 import java.io.File;
@@ -10,7 +11,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class ImageTester {
-    private static final String cur_ver = "0.1.0"; //TODO find more suitable place and logic
+    private static final String cur_ver = "0.2.1"; //TODO find more suitable place and logic
     private static final String eyes_utils = "EyesUtilities.jar";
 
     private static boolean eyes_utils_enabled = false;
@@ -84,18 +85,16 @@ public class ImageTester {
             //DPI
             builder.setDpi(Float.valueOf(cmd.getOptionValue("dpi", "300")));
 
+            // Determine Pages to include
+            if (cmd.hasOption("sp")) builder.setPages(cmd.getOptionValue("sp"));
 
-            if (eyes_utils_enabled) {
-                if (cmd.hasOption("gd") || cmd.hasOption("gi") || cmd.hasOption("gg")) {
-                    if (!cmd.hasOption("vk"))
-                        throw new ParseException("gd|gi|gg must be called with enterprise view-key (vk)");
-                    builder.setViewKey(cmd.getOptionValue("vk"));
-                    builder.setDestinationFolder(cmd.getOptionValue("of", "./"));
-                    builder.setDownloadDiffs(cmd.hasOption("gd"));
-                    builder.setGetImages(cmd.hasOption("gi"));
-                    builder.setGetGifs(cmd.hasOption("gg"));
-                }
-            }
+            // Read PDF Password
+            if (cmd.hasOption("pp")) builder.setPdfPassword(cmd.getOptionValue("pp"));
+
+
+
+            if (eyes_utils_enabled) builder.setEyesUtilitiesConfig(new EyesUtilitiesConfig(cmd));
+
 
             ITestable suite = builder.build();
             if (suite == null) {
@@ -130,14 +129,16 @@ public class ImageTester {
         options.addOption(Option.builder("a")
                 .longOpt("AppName")
                 .desc("Set own application name, default: ImageTester")
-                .hasArg().argName("name")
+                .hasArg()
+                .argName("name")
                 .build()
         );
 
         options.addOption(Option.builder("f")
                 .longOpt("folder")
                 .desc("Set the root folder to start the analysis, default: \\.")
-                .hasArg().argName("path")
+                .hasArg()
+                .argName("path")
                 .build()
         );
 
@@ -223,7 +224,20 @@ public class ImageTester {
         options.addOption(Option.builder("di")
                 .longOpt("dpi")
                 .desc("PDF conversion dots per inch parameter default value 300")
-                .hasArg().argName("Dpi")
+                .hasArg()
+                .argName("Dpi")
+                .build());
+        options.addOption(Option.builder("sp")
+                .longOpt("selectedPages")
+                .desc("PDF pages to select")
+                .hasArg()
+                .argName("Pages")
+                .build());
+        options.addOption(Option.builder("pp")
+                .longOpt("PDFPassword")
+                .desc("PDF Password")
+                .hasArg()
+                .argName("Password")
                 .build());
 
 

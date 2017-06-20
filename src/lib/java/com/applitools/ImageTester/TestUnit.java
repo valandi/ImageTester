@@ -1,12 +1,10 @@
-import com.applitools.eyes.Eyes;
+package com.applitools.ImageTester;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.AccessDeniedException;
 
 public abstract class TestUnit implements ITestable {
     protected final File file_;
-    private String name_;
+    protected String name_;
 
     protected TestUnit(File file) {
         file_ = file;
@@ -23,4 +21,9 @@ public abstract class TestUnit implements ITestable {
     public String name() {
         return file_ == null ? name_ : file_.getName();
     }
+
+    public File getFile() {
+        return file_;
+    }
+
 }

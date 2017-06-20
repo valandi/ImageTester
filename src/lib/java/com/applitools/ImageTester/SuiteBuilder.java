@@ -1,3 +1,5 @@
+package com.applitools.ImageTester;
+
 import com.applitools.eyes.BatchInfo;
 import com.applitools.eyes.RectangleSize;
 import org.apache.commons.io.comparator.NameFileComparator;
@@ -9,12 +11,27 @@ public class SuiteBuilder {
     private File rootFolder_;
     private String appname_;
     private RectangleSize viewport_;
-    private String viewKey_;
-    private String destinationFolder_;
-    private boolean downloadDiffs_;
-    private boolean getImages_;
-    private boolean getGifs_;
+    private EyesUtilitiesConfig eyesUtilitiesConfig_;
     private float pdfdpi_;
+    private String pdfPassword_;
+    private String pages_;
+
+    public String getPages() {
+        return pages_;
+    }
+
+    public void setPages(String steps) {
+        this.pages_ = steps;
+    }
+
+    public EyesUtilitiesConfig getEyesUtilitiesConfig() {
+        return eyesUtilitiesConfig_;
+    }
+
+    public void setEyesUtilitiesConfig(EyesUtilitiesConfig eyesUtilitiesConfig) {
+        this.eyesUtilitiesConfig_ = eyesUtilitiesConfig;
+    }
+
 
     public SuiteBuilder(File rootFolder, String appname, RectangleSize viewport) {
         this.rootFolder_ = rootFolder;
@@ -29,25 +46,6 @@ public class SuiteBuilder {
     public void setDpi(float dpi){
         this.pdfdpi_ =dpi;
     }
-    public void setViewKey(String viewKey) {
-        this.viewKey_ = viewKey;
-    }
-
-    public void setDestinationFolder(String destinationFolder) {
-        this.destinationFolder_ = destinationFolder;
-    }
-
-    public void setDownloadDiffs(boolean downloadDiffs) {
-        this.downloadDiffs_ = downloadDiffs;
-    }
-
-    public void setGetImages(boolean getImages) {
-        this.getImages_ = getImages;
-    }
-
-    public void setGetGifs(boolean getGifs) {
-        this.getGifs_ = getGifs;
-    }
 
     private ITestable build(File curr, String appname, RectangleSize viewport) throws IOException {
         String jenkinsJobName = System.getenv("JOB_NAME");
@@ -60,6 +58,13 @@ public class SuiteBuilder {
             jenkinsBatch = new Batch(batch);
         }
         ITestable unit = build(curr, appname, viewport, jenkinsBatch);
+        if (unit instanceof ImageStep) {
+            ImageStep step= (ImageStep) unit;
+            Test test = new Test(step.getFile(),appname);
+            test.setEyesUtilitiesConfig(eyesUtilitiesConfig_);
+            test.addStep(step);
+            unit=test;
+        }
         if (unit instanceof Test && jenkinsBatch != null) {
             jenkinsBatch.addTest((Test) unit);
             return jenkinsBatch;
@@ -81,12 +86,14 @@ public class SuiteBuilder {
         if (curr.isFile()) {
             if (PDFTest.supports(curr)) {
                 PDFTest pdftest= new PDFTest(curr, appname_, pdfdpi_);
-                setEyesUtilitisParams(pdftest);
+                pdftest.setEyesUtilitiesConfig(eyesUtilitiesConfig_);
+                pdftest.setPages(pages_);
+                pdftest.setPdfPassword(pdfPassword_);
                 return pdftest;
             }
             if (PostscriptTest.supports(curr)) {
                 PostscriptTest postScriptest= new PostscriptTest(curr, appname);
-                setEyesUtilitisParams(postScriptest);
+                postScriptest.setEyesUtilitiesConfig(eyesUtilitiesConfig_);
                 return postScriptest;
             }
             return ImageStep.supports(curr) ? new ImageStep(curr) : null;
@@ -103,7 +110,7 @@ public class SuiteBuilder {
             ITestable unit = build(file, appname, viewport, flatBatch);
             if (unit instanceof ImageStep) {
                 if (currTest == null) currTest = new Test(curr, appname, viewport);
-                setEyesUtilitisParams(currTest);
+                currTest.setEyesUtilitiesConfig(eyesUtilitiesConfig_);
                 ImageStep step = (ImageStep) unit;
                 if (step.hasRegionFile())
                     currTest.addSteps(step.getRegions());
@@ -147,12 +154,12 @@ public class SuiteBuilder {
 
         return currBatch;
     }
-    private void setEyesUtilitisParams(Test currTest){
-        currTest.setViewKey(viewKey_);
-        currTest.setDestinationFolder(destinationFolder_);
-        currTest.setDownloadDiffs(downloadDiffs_);
-        currTest.setGetImages(getImages_);
-        currTest.setGetGifs(getGifs_);
 
+    public String getPdfPassword() {
+        return pdfPassword_;
+    }
+
+    public void setPdfPassword(String pdfPassword) {
+        this.pdfPassword_ = pdfPassword;
     }
 }
