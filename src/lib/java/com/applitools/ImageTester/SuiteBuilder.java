@@ -58,6 +58,13 @@ public class SuiteBuilder {
             jenkinsBatch = new Batch(batch);
         }
         ITestable unit = build(curr, appname, viewport, jenkinsBatch);
+        if (unit instanceof ImageStep) {
+            ImageStep step= (ImageStep) unit;
+            Test test = new Test(step.getFile(),appname);
+            test.setEyesUtilitiesConfig(eyesUtilitiesConfig_);
+            test.addStep(step);
+            unit=test;
+        }
         if (unit instanceof Test && jenkinsBatch != null) {
             jenkinsBatch.addTest((Test) unit);
             return jenkinsBatch;

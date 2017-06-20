@@ -21,4 +21,9 @@ public abstract class TestUnit implements ITestable {
     public String name() {
         return file_ == null ? name_ : file_.getName();
     }
+
+    public File getFile() {
+        return file_;
+    }
+
 }
