@@ -83,6 +83,7 @@ public class Test extends TestUnit {
     }
 
     protected void handleResultsDownload(TestResults results) throws Exception {
+        if (eyesUtilitiesConfig_ == null) return;
         if (eyesUtilitiesConfig_.getDownloadDiffs() || eyesUtilitiesConfig_.getGetGifs() || eyesUtilitiesConfig_.getGetImages()) {
             if (eyesUtilitiesConfig_.getViewKey() == null) throw new RuntimeException("The view-key cannot be null");
             if (eyesUtilitiesConfig_.getDownloadDiffs() && !results.isNew() && !results.isPassed())
