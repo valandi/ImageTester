@@ -3,3 +3,4 @@ out/
 EyesUtilities.jar
 *.iml
 target/
+src/test/Unit1
