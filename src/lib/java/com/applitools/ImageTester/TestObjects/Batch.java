@@ -38,7 +38,6 @@ public class Batch extends TestUnit {
         tests_.add(test);
     }
 
-    @Override
     public void dispose() {
         if (tests_ == null) return;
         for (Test test : tests_) {

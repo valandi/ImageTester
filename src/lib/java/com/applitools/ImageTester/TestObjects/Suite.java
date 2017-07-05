@@ -59,7 +59,6 @@ public class Suite extends TestUnit {
         test_ = test;
     }
 
-    @Override
     public void dispose() {
         if (test_ != null) test_.dispose();
     }
