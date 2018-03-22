@@ -63,7 +63,7 @@ public class SuiteBuilder {
         ITestable unit = build(curr, appname, viewport, jenkinsBatch);
         if (unit instanceof ImageStep) {
             ImageStep step = (ImageStep) unit;
-            Test test = new Test(step.getFile(), appname);
+            Test test = new Test(step.getFile(), appname, viewport_);
             test.setEyesUtilitiesConfig(eyesUtilitiesConfig_);
             test.addStep(step);
             unit = test;
@@ -88,7 +88,7 @@ public class SuiteBuilder {
 
         if (curr.isFile()) {
             if (PDFTest.supports(curr)) {
-                PDFTest pdftest = new PDFTest(curr, appname_, pdfdpi_);
+                PDFTest pdftest = new PDFTest(curr, appname_, pdfdpi_, viewport);
                 pdftest.setEyesUtilitiesConfig(eyesUtilitiesConfig_);
                 pdftest.setPages(pages_);
                 pdftest.setPdfPassword(pdfPassword_);

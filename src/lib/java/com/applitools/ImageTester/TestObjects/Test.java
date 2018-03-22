@@ -47,9 +47,7 @@ public class Test extends TestUnit {
                 e.printStackTrace();
             }
         }
-        try
-
-        {
+        try {
             TestResults result = eyes.close(false);
             printTestResults(result);
             handleResultsDownload(result);

@@ -13,7 +13,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class ImageTester {
-    private static final String cur_ver = "0.2.3"; //TODO find more suitable place and logic
+    private static final String cur_ver = "0.2.7"; //TODO find more suitable place and logic
     private static final String eyes_utils = "EyesUtilities.jar";
 
     private static boolean eyes_utils_enabled = false;
@@ -149,7 +149,7 @@ public class ImageTester {
                 .desc("Set proxy address")
                 .numberOfArgs(3)
                 .optionalArg(true)
-                .valueSeparator(';')
+                .valueSeparator(';') //; and not : to avoid split of the http: part.
                 .argName("url [;user;password]")
                 .build()
         );
