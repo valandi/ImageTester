@@ -1,6 +1,8 @@
 package com.applitools.ImageTester.TestObjects;
 
+import com.applitools.ImageTester.Interfaces.IResultsReporter;
 import com.applitools.ImageTester.Patterns;
+import com.applitools.eyes.RectangleSize;
 import com.applitools.eyes.TestResults;
 import com.applitools.eyes.images.Eyes;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -20,20 +22,30 @@ public class PDFTest extends Test {
     private static final Pattern pattern = Patterns.PDF;
     private float dpi_;
     private String pdfPassword;
-    private List<Integer> pagesList_;
     private String pages_;
 
     public void setPages(String pages) throws IOException {
         this.pages_ = pages;
-        this.pagesList_ = setPagesList(pages);
     }
 
     protected PDFTest(File file, String appname) {
-        this(file, appname, 300f);
+        this(file, appname, 300f, null);
     }
 
-    public PDFTest(File file, String appname, float dpi) {
-        super(file, appname);
+    public PDFTest(File file, String appname, float dpi, RectangleSize viewport) {
+        this(file, appname, dpi, viewport, null);
+    }
+
+    public PDFTest(String file, String appname, float dpi, RectangleSize viewport) {
+        this(new File(file), appname, dpi, viewport, null);
+    }
+
+    public PDFTest(String file, String appname, float dpi, RectangleSize viewport, IResultsReporter reporter) {
+        this(new File(file), appname, dpi, viewport, reporter);
+    }
+
+    public PDFTest(File file, String appname, float dpi, RectangleSize viewport, IResultsReporter reporter) {
+        super(file, appname, viewport, reporter);
         this.dpi_ = dpi;
     }
 
@@ -42,17 +54,19 @@ public class PDFTest extends Test {
         Exception ex = null;
         TestResults result = null;
 
+
         try {
             PDDocument document = PDDocument.load(file_, pdfPassword);
             PDFRenderer pdfRenderer = new PDFRenderer(document);
-            eyes.open(appname_, name());
+            List<Integer> pagesList_ = setPagesList(document, pages_);
 
+            eyes.open(appname_, name(), viewportSize_);
             for (int i = 0; i < pagesList_.size(); i++) {
                 BufferedImage bim = pdfRenderer.renderImageWithDPI(pagesList_.get(i) - 1, dpi_);
                 eyes.checkImage(bim, String.format("Page-%s", pagesList_.get(i)));
             }
             result = eyes.close(false);
-            printTestResults(result);
+            reporter_.onTestFinished(name(), result);
             handleResultsDownload(result);
             document.close();
         } catch (IOException e) {
@@ -60,7 +74,7 @@ public class PDFTest extends Test {
             System.out.printf("Error closing test %s \nPath: %s \nReason: %s \n", e.getMessage());
 
         } catch (Exception e) {
-            System.out.println("Oops, something went wrong!");
+            System.out.printf("Oops, something went wrong while processing the file %s! \n", file_.getName());
             System.out.print(e);
             e.printStackTrace();
         } finally {
@@ -85,11 +99,9 @@ public class PDFTest extends Test {
         this.pdfPassword = pdfPassword;
     }
 
-    public List<Integer> setPagesList(String pages) throws IOException {
+    public List<Integer> setPagesList(PDDocument document, String pages) throws IOException {
         if (pages != null) return parsePagesToList(pages);
         else {
-            PDDocument document = PDDocument.load(this.file_, this.pdfPassword);
-            PDFRenderer pdfRenderer = new PDFRenderer(document);
             ArrayList<Integer> list = new ArrayList<Integer>();
             for (int page = 0; page < document.getNumberOfPages(); ++page) {
                 list.add(page + 1);

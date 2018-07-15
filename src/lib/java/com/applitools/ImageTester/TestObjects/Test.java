@@ -5,7 +5,9 @@ import com.applitools.Commands.DownloadDiffs;
 import com.applitools.Commands.DownloadImages;
 import com.applitools.ImageTester.EyesUtilitiesConfig;
 import com.applitools.ImageTester.Interfaces.IDisposable;
+import com.applitools.ImageTester.Interfaces.IResultsReporter;
 import com.applitools.ImageTester.Interfaces.ITestable;
+import com.applitools.ImageTester.StdoutReporter;
 import com.applitools.eyes.EyesException;
 import com.applitools.eyes.RectangleSize;
 import com.applitools.eyes.TestResults;
@@ -18,6 +20,7 @@ public class Test extends TestUnit {
 
     protected final String appname_;
     protected RectangleSize viewportSize_;
+    protected IResultsReporter reporter_;
     private Queue<ITestable> steps_;
     private EyesUtilitiesConfig eyesUtilitiesConfig_;
 
@@ -27,10 +30,15 @@ public class Test extends TestUnit {
     }
 
     public Test(File file, String appname, RectangleSize viewportSize) {
+        this(file, appname, viewportSize, null);
+    }
+
+    public Test(File file, String appname, RectangleSize viewportSize, IResultsReporter reporter) {
         super(file);
         steps_ = new LinkedList<ITestable>();
         appname_ = appname;
         viewportSize_ = viewportSize;
+        reporter_ = (reporter == null) ? new StdoutReporter("\t[%s] - %s\n") : reporter;
     }
 
     public void run(Eyes eyes) {
@@ -49,12 +57,9 @@ public class Test extends TestUnit {
         }
         try {
             TestResults result = eyes.close(false);
-            printTestResults(result);
+            reporter_.onTestFinished(name(), result);
             handleResultsDownload(result);
-        } catch (
-                EyesException e)
-
-        {
+        } catch (EyesException e) {
             System.out.printf("Error closing test %s \nPath: %s \nReason: %s \n",
                     name(),
                     file_.getAbsolutePath(),
@@ -69,10 +74,7 @@ public class Test extends TestUnit {
                 System.out.println("I don't have any idea what just happened.");
                 System.out.println("Please try reaching our support at support@applitools.com");
             }
-        } catch (
-                Exception e)
-
-        {
+        } catch (Exception e) {
             System.out.println("Oops, something went wrong!");
             System.out.print(e);
             e.printStackTrace();
@@ -99,15 +101,6 @@ public class Test extends TestUnit {
 
     public void addSteps(Collection<ITestable> steps) {
         steps_.addAll(steps);
-    }
-
-    protected void printTestResults(TestResults result) {
-        String res = result.getSteps() > 0 ? (result.isNew() ? "New" : (result.isPassed() ? "Passed" : "Failed")) : "Empty";
-        System.out.printf("\t[%s] - %s", res, name());
-        if (!result.isPassed() && !result.isNew())
-            System.out.printf("\tResult url: %s", result.getUrl());
-        System.out.println();
-
     }
 
     public void setEyesUtilitiesConfig(EyesUtilitiesConfig eyesUtilitiesConfig) {

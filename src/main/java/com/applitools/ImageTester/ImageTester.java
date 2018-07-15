@@ -13,7 +13,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class ImageTester {
-    private static final String cur_ver = "0.2.8"; //TODO find more suitable place and logic
+    private static final String cur_ver = "0.2.9"; //TODO find more suitable place and logic
     private static final String eyes_utils = "EyesUtilities.jar";
 
     private static boolean eyes_utils_enabled = false;
@@ -80,19 +80,21 @@ public class ImageTester {
             }
             // Folder path
             File root = new File(cmd.getOptionValue("f", "."));
-            root = new File(root.getCanonicalPath());
 
-            SuiteBuilder builder = new SuiteBuilder(root, cmd.getOptionValue("a", "ImageTester"), viewport);
+            SuiteBuilder builder = new SuiteBuilder(
+                    root.getCanonicalPath(),
+                    cmd.getOptionValue("a", "ImageTester"),
+                    viewport,
+                    new StdoutReporter("\t[%s] - %s\n"));
 
             //DPI
-            builder.setDpi(Float.valueOf(cmd.getOptionValue("dpi", "300")));
+            builder.setDpi(Float.valueOf(cmd.getOptionValue("dpi", "250")));
 
             // Determine Pages to include
             if (cmd.hasOption("sp")) builder.setPages(cmd.getOptionValue("sp"));
 
             // Read PDF Password
             if (cmd.hasOption("pp")) builder.setPdfPassword(cmd.getOptionValue("pp"));
-
 
 
             if (eyes_utils_enabled) builder.setEyesUtilitiesConfig(new EyesUtilitiesConfig(cmd));

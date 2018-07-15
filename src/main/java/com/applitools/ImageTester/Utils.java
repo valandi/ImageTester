@@ -2,7 +2,7 @@ package com.applitools.ImageTester;
 
 
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.EnumSet;
 

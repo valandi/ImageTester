@@ -1,5 +1,6 @@
 package com.applitools.ImageTester.TestObjects;
 
+import com.applitools.ImageTester.Interfaces.IResultsReporter;
 import com.applitools.eyes.BatchInfo;
 import com.applitools.eyes.images.Eyes;
 
@@ -10,14 +11,17 @@ import java.util.Queue;
 public class Batch extends TestUnit {
     private BatchInfo batch_;
     private Queue<Test> tests_ = new LinkedList<Test>();
+    private IResultsReporter reporter_;
 
-    public Batch(File file) {
+    public Batch(File file, IResultsReporter reporter) {
         super(file);
+        reporter_ = reporter;
     }
 
-    public Batch(BatchInfo batch) {
+    public Batch(BatchInfo batch, IResultsReporter reporter) {
         super(batch.getName());
         batch_ = batch;
+        reporter_ = reporter;
     }
 
     public void run(Eyes eyes) {
@@ -31,6 +35,7 @@ public class Batch extends TestUnit {
                 test.dispose();
             }
         }
+        reporter_.onBatchFinished(batch_.getName());
         eyes.setBatch(null);
     }
 
