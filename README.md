@@ -73,10 +73,11 @@ The tool build in java and requires minimal set of parametersm the minimal comma
     + `-os [osname]` - Set custom os
     + `-ap [browser name]` - Set browser or equivalent hosting application name
     + `-as` - Set automatic save on failures
-    ######For PDFs only
+    ######For Documents (PDFs) only
     + `-di [dpi]` - Set the quality of the conversion on PDF files
     + `-sp [pages]` - Comma separated page numbers to include in PDF testing (ie: 1,2,5,7); Default all included
     + `-pp [password]` - The password if the PDF files protected
+    + `-pn` - Preserve original test names when specifying pages
  
 ## Enterprise features in combination with [Eyes Utilities](https://github.com/yanirta/EyesUtilities)
 By placing the Eyes-Utilities jar into the same folder as the ImageTester, new enterprise api features

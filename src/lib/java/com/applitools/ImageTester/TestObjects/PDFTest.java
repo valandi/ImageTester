@@ -23,9 +23,11 @@ public class PDFTest extends Test {
     private float dpi_;
     private String pdfPassword;
     private String pages_;
+    private boolean includePagesInTestName_;
 
-    public void setPages(String pages) throws IOException {
+    public void setPages(String pages, boolean includePagesInTestName) throws IOException {
         this.pages_ = pages;
+        this.includePagesInTestName_ = includePagesInTestName;
     }
 
     protected PDFTest(File file, String appname) {
@@ -113,7 +115,8 @@ public class PDFTest extends Test {
     @Override
     public String name() {
         String pagesText = "";
-        if (pages_ != null) pagesText = " pages [" + pages_ + "]";
+        if (pages_ != null && includePagesInTestName_)
+            pagesText = " pages [" + pages_ + "]";
         return file_ == null ? name_ + pagesText : file_.getName() + pagesText;
     }
 }

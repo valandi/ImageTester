@@ -13,7 +13,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class ImageTester {
-    private static final String cur_ver = "0.2.9"; //TODO find more suitable place and logic
+    private static final String cur_ver = "0.3.1"; //TODO find more suitable place and logic
     private static final String eyes_utils = "EyesUtilities.jar";
 
     private static boolean eyes_utils_enabled = false;
@@ -35,7 +35,6 @@ public class ImageTester {
                     return String.format("ImageTester/%s [%s]", cur_ver, super.getBaseAgentId());
                 }
             };
-
             //API key
             eyes.setApiKey(cmd.getOptionValue("k"));
             // Applitools Server url
@@ -91,11 +90,10 @@ public class ImageTester {
             builder.setDpi(Float.valueOf(cmd.getOptionValue("dpi", "250")));
 
             // Determine Pages to include
-            if (cmd.hasOption("sp")) builder.setPages(cmd.getOptionValue("sp"));
+            if (cmd.hasOption("sp")) builder.setPages(cmd.getOptionValue("sp"), !cmd.hasOption("pn"));
 
             // Read PDF Password
             if (cmd.hasOption("pp")) builder.setPdfPassword(cmd.getOptionValue("pp"));
-
 
             if (eyes_utils_enabled) builder.setEyesUtilitiesConfig(new EyesUtilitiesConfig(cmd));
 
@@ -233,9 +231,14 @@ public class ImageTester {
                 .build());
         options.addOption(Option.builder("sp")
                 .longOpt("selectedPages")
-                .desc("PDF pages to select")
+                .desc("Document pages to validate, default is the entire document")
                 .hasArg()
                 .argName("Pages")
+                .build());
+        options.addOption(Option.builder("pn")
+                .longOpt("preserveTestNames")
+                .desc("On partial document validation, preserve original test name")
+                .hasArg(false)
                 .build());
         options.addOption(Option.builder("pp")
                 .longOpt("PDFPassword")

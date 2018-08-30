@@ -20,13 +20,15 @@ public class SuiteBuilder {
     private String pdfPassword_;
     private String pages_;
     private IResultsReporter reporter_;
+    private boolean includePagesInTestName_;
 
     public String getPages() {
         return pages_;
     }
 
-    public void setPages(String steps) {
+    public void setPages(String steps, boolean includePagesInTestName) {
         this.pages_ = steps;
+        this.includePagesInTestName_ = includePagesInTestName;
     }
 
     public EyesUtilitiesConfig getEyesUtilitiesConfig() {
@@ -92,7 +94,7 @@ public class SuiteBuilder {
             if (PDFTest.supports(curr)) {
                 PDFTest pdftest = new PDFTest(curr, appname_, pdfdpi_, viewport_, reporter_);
                 pdftest.setEyesUtilitiesConfig(eyesUtilitiesConfig_);
-                pdftest.setPages(pages_);
+                pdftest.setPages(pages_, includePagesInTestName_);
                 pdftest.setPdfPassword(pdfPassword_);
                 return pdftest;
             }
