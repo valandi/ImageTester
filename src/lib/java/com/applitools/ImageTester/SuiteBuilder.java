@@ -71,6 +71,8 @@ public class SuiteBuilder {
             Test test = new Test(step.getFile(), appname_, viewport_, reporter_);
             test.setEyesUtilitiesConfig(eyesUtilitiesConfig_);
             test.addStep(step);
+            if (step.hasRegionFile())
+                test.addSteps(step.getRegions());
             unit = test;
         }
         if (unit instanceof Test && jenkinsBatch != null) {
@@ -88,7 +90,6 @@ public class SuiteBuilder {
         }
 
         if (appname_ == null) appname_ = "ImageTester";
-
 
         if (curr.isFile()) {
             if (PDFTest.supports(curr)) {
