@@ -17,8 +17,8 @@ public class StdoutReporter implements IResultsReporter {
         if (result == null) return;
         if (result.getSteps() > 0) {
             if (result.isNew()) status = "New";
-            if (result.isPassed()) status = "Passed";
-            if (result.isAborted()) status = "Aborted";
+            else if (result.isPassed()) status = "Passed";
+            else if (result.isAborted()) status = "Aborted";
             else status = "Mismatch";
         } else
             status = "Empty";
