@@ -1,4 +1,5 @@
-# Image Tester [ ![Download](https://api.bintray.com/packages/applitoolseyes/generic/ImageTester/images/download.svg) ](https://bintray.com/applitoolseyes/generic/download_file?file_path=ImageTester.jar)
+# Image Tester [ ![Download](https://api.bintray.com/packages/applitoolseyes/generic/ImageTester/images/download.svg) ](https://bintray.com/applitoolseyes/generic/ImageTester/_latestVersion)
+
 ImageTester is a Cli tool to perform visual tests on images or PDF files. 
 
 If you don't have your Applitools account yet, 
