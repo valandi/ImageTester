@@ -76,7 +76,7 @@ The tool build in java and requires minimal set of parameters the minimal comman
     + `-as` - Set automatic save on failures
     + `-st` - Split steps to individual tests
     
-    ######For Documents (PDFs) only
+    ###### For Documents (PDFs) only
     + `-di [dpi]` - Set the quality of the conversion on PDF files
     + `-sp [pages]` - Comma separated page numbers to include in PDF testing (ie: 1,2,5,7); Default all included
     + `-pp [password]` - The password if the PDF files protected
