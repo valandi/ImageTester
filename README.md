@@ -63,7 +63,7 @@ The tool build in java and requires minimal set of parameters the minimal comman
 + Optional paramaeters:
     + `-f [path]` - A path to target folder or file
     + `-a [app-name]` - Set the application name under directoryTest; default = ImageTester
-    + `-p [http://proxy{;user;pass}]` - Set proxy and optional username + password
+    + `-p [http://proxy{,user,pass}]` - Set proxy and optional username + password
     + `-s [server]` - Set Applitools server url
     + `-ml [match-level]` - Set the comparison level, one from Strict/Content/Layout; Default = Strict
     + `-br [branch]` - Set the branch
