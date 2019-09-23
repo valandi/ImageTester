@@ -60,7 +60,7 @@ The tool build in java and requires minimal set of parameters the minimal comman
 
 + Required parameters:
     + `-k [api-key]` - Applitools api key
-+ Optional paramaeters:
++ Optional parameters and flags:
     + `-f [path]` - A path to target folder or file
     + `-a [app-name]` - Set the application name under directoryTest; default = ImageTester
     + `-p [http://proxy{,user,pass}]` - Set proxy and optional username + password
@@ -76,6 +76,7 @@ The tool build in java and requires minimal set of parameters the minimal comman
     + `-th [number]` - Specify max. concurrent workers (Threads). default= 3
     + `-as` - Set automatic save on failures
     + `-st` - Split steps to individual tests
+    + `-id` - Ignore displacement of shifting elements.
     
     ###### For Documents (PDFs) only
     + `-di [dpi]` - Set the quality of the conversion on PDF files
