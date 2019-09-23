@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 public class ImageTester {
-    private static final String cur_ver = "1.0.2";
+    private static final String cur_ver = "1.1.0";
     private static final String eyes_utils = "EyesUtilities.jar";
 
     private static boolean eyes_utils_enabled = false;
@@ -53,6 +53,7 @@ public class ImageTester {
             config.pdfPass = cmd.getOptionValue("pp", null);
             config.pages = cmd.getOptionValue("sp", null);
             config.includePageNumbers = cmd.hasOption("pn");
+            config.forcedName = cmd.getOptionValue("fn", null);
             config.setViewport(cmd.getOptionValue("vs", null));
 
             String ciJobName = System.getenv("JOB_NAME");
@@ -245,7 +246,11 @@ public class ImageTester {
                 .desc("Aggregate all test results in a single batch (aka flat-batch)")
                 .argName("name")
                 .build());
-
+        options.addOption(Option.builder("fn")
+                .longOpt("forcedName")
+                .desc("Force name for all tests, (will make all folders/files to be matched with a single baseline)")
+                .argName("testName")
+                .build());
         if (eyes_utils_enabled) {
             System.out.printf("%s is integrated, extra features are available. \n", eyes_utils);
             EyesUtilitiesConfig.injectOptions(options);

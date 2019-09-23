@@ -35,7 +35,10 @@ public abstract class TestBase implements ITest {
     }
 
     public String name() {
-        return file_.getName();
+        if (conf_.forcedName != null)
+            return conf_.forcedName;
+        else
+            return file_.getName();
     }
 
     public TestResults runSafe(Eyes eyes) {

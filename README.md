@@ -74,6 +74,7 @@ The tool build in java and requires minimal set of parameters the minimal comman
     + `-os [osname]` - Set custom os
     + `-ap [browser name]` - Set browser or equivalent hosting application name
     + `-th [number]` - Specify max. concurrent workers (Threads). default= 3
+    + `-fn [testName]` - Force all test names to be specific name. This will force all tests to be matched with a single baseline.
     + `-as` - Set automatic save on failures
     + `-st` - Split steps to individual tests
     + `-id` - Ignore displacement of shifting elements.
