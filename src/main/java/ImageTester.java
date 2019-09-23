@@ -41,7 +41,8 @@ public class ImageTester {
                     .logFile(cmd.getOptionValue("lf", null))
                     .hostOs(cmd.getOptionValue("os", null))
                     .hostApp(cmd.getOptionValue("ap"))
-                    .saveFaliedTests(cmd.hasOption("as"));
+                    .saveFaliedTests(cmd.hasOption("as"))
+                    .ignoreDisplacement(cmd.hasOption("id"));
 
             Config config = new Config();
             config.splitSteps = cmd.hasOption("st");
@@ -207,6 +208,11 @@ public class ImageTester {
                 .desc("Document pages to validate, default is the entire document")
                 .hasArg()
                 .argName("Pages")
+                .build());
+        options.addOption(Option.builder("id")
+                .longOpt("ignoreDisplacement")
+                .desc("Ignore displacement of shifting elements")
+                .hasArg(false)
                 .build());
         options.addOption(Option.builder("pn")
                 .longOpt("pageNumbers")

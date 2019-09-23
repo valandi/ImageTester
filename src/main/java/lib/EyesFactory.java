@@ -19,7 +19,8 @@ public class EyesFactory {
     private String logFilename;
     private String hostOs;
     private String hostApp;
-    private boolean saveFailed;
+    private boolean saveFailed = false;
+    private boolean ignoreDisplacement = false;
 
     public EyesFactory(String ver, Logger logger) {
         this.version = ver;
@@ -34,8 +35,12 @@ public class EyesFactory {
             }
         };
         eyes.setApiKey(this.apiKey);
-        eyes.setSaveFailedTests(saveFailed);
 
+        //flags
+        eyes.setSaveFailedTests(saveFailed);
+        eyes.setIgnoreDisplacements(ignoreDisplacement);
+
+        //String params
         if (StringUtils.isNotBlank(this.serverUrl))
             eyes.setServerUrl(this.serverUrl);
         if (StringUtils.isNotBlank(this.matchLevel))
@@ -50,7 +55,6 @@ public class EyesFactory {
             eyes.setHostOS(this.hostOs);
         if (StringUtils.isNotBlank(this.hostApp))
             eyes.setHostApp(this.hostApp);
-
         if (StringUtils.isNotBlank(this.logFilename))
             eyes.setLogHandler(new FileLogger(this.logFilename, true, true));
 
@@ -123,6 +127,11 @@ public class EyesFactory {
 
     public EyesFactory saveFaliedTests(boolean saveFailed) {
         this.saveFailed = saveFailed;
+        return this;
+    }
+
+    public EyesFactory ignoreDisplacement(boolean ignore) {
+        this.ignoreDisplacement = ignore;
         return this;
     }
 }
