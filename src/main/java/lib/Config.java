@@ -3,6 +3,9 @@ package lib;
 import com.applitools.eyes.BatchInfo;
 import com.applitools.eyes.RectangleSize;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class Config {
     public RectangleSize viewport;
     public String appName = "ImageTester";
