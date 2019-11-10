@@ -1,5 +1,6 @@
 package lib;
 
+import com.beust.jcommander.Strings;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
@@ -9,7 +10,7 @@ import org.apache.commons.cli.ParseException;
  * Created by liranbarokas on 08/05/2017.
  */
 public class EyesUtilitiesConfig {
-
+    private final String DEFAULT_DEST_PATH_TEMPL = "{workdir_root}/Artifacts/{batch_id}/{test_id}/file:{step_index}_{step_tag}_{artifact_type}.{file_ext}";
     private String viewKey_;
     private String destinationFolder_;
     private Boolean downloadDiffs_ = false;
@@ -27,10 +28,10 @@ public class EyesUtilitiesConfig {
 
     public EyesUtilitiesConfig(CommandLine cmd) throws ParseException {
         if (cmd.hasOption("gd") || cmd.hasOption("gi") || cmd.hasOption("gg")) {
-            if (!cmd.hasOption("vk"))
+            viewKey_ = cmd.getOptionValue("vk", System.getenv("APPLITOOLS_VIEW_KEY"));
+            if (viewKey_ == null || Strings.isStringEmpty(viewKey_))
                 throw new ParseException("gd|gi|gg must be called with enterprise view-key (vk)");
-            viewKey_ = cmd.getOptionValue("vk");
-            destinationFolder_ = cmd.getOptionValue("of", "./");
+            destinationFolder_ = cmd.getOptionValue("of", DEFAULT_DEST_PATH_TEMPL);
             downloadDiffs_ = cmd.hasOption("gd");
             getImages_ = cmd.hasOption("gi");
             getGifs_ = cmd.hasOption("gg");

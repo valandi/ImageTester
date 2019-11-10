@@ -4,7 +4,10 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.log4j.Level;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -107,5 +110,23 @@ public class Logger {
     public void printHelp(Options options) {
         HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp("ImageTester [-k <api-key>] [options]", options);
+    }
+
+    public void logPage(BufferedImage bim, String testname, Integer page) {
+        try {
+            logPage_(bim, testname, page);
+        } catch (IOException e) {
+            reportException(e);
+        }
+    }
+
+    private void logPage_(BufferedImage bim, String testname, Integer page) throws IOException {
+        if (!debug_) return;
+        File debugOutFolder = new File(System.getProperty("user.dir"), "debug");
+        if (!debugOutFolder.exists())
+            debugOutFolder.mkdir();
+
+        File pageImg = new File(debugOutFolder, String.format("%s_page_%s.png", testname, page));
+        ImageIO.write(bim, "png", pageImg);
     }
 }

@@ -19,6 +19,7 @@ public class PdfFileTest extends DocumentTestBase {
 
     public TestResults run(Eyes eyes) throws Exception {
         PDDocument document = null;
+
         try {
             document = PDDocument.load(file(), config().pdfPass);
             if (pageList_ == null || pageList_.isEmpty())
@@ -28,6 +29,8 @@ public class PdfFileTest extends DocumentTestBase {
             for (Integer page : pageList_) {
                 try {
                     BufferedImage bim = pdfRenderer.renderImageWithDPI(page - 1, config().DocumentConversionDPI);
+                    logger().logPage(bim, name(), page);
+
                     eyes.checkImage(bim, String.format("Page-%s", page));
                 } catch (IOException e) {
                     logger().reportException(e, file().getAbsolutePath());

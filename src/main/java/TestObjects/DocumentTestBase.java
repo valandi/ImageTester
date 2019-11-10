@@ -26,7 +26,6 @@ public abstract class DocumentTestBase extends TestBase {
         return file().getName() + pagesText;
     }
 
-
     @Override
     public boolean isEmpty() {
         return false;

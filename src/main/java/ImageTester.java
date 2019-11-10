@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 public class ImageTester {
-    private static final String cur_ver = "1.1.1";
+    private static final String cur_ver = "1.1.3";
     private static final String eyes_utils = "EyesUtilities.jar";
 
     private static boolean eyes_utils_enabled = false;

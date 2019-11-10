@@ -8,7 +8,10 @@ import lib.Logger;
 import lib.TestExecutor;
 import org.junit.Test;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
 import java.io.File;
+import java.util.Iterator;
 
 public class TestFolders extends Base {
     @Test
@@ -35,18 +38,21 @@ public class TestFolders extends Base {
 
     @Test
     public void testMultiHeirarchyThreadsTest() {
-        suiteRun("FolderTestsApp", "src/test/TestData/b");
+        runWhitebox("FolderTestsApp", "src/test/TestData/b");
     }
 
     @Test
     public void testSingleImage() {
-        suiteRun("FolderTestsApp", "src/test/TestData/b/c/googleforgoogle.png");
+        runWhitebox("FolderTestsApp", "src/test/TestData/b/c/googleforgoogle.png");
     }
 
     @Test(expected = RuntimeException.class)
     public void testPDFTest() {
-        suiteRun("FolderTestsApp", "src/test/TestData/b/c/JustPDF/Lorem2.pdf");
-        suiteRun("FolderTestsApp", "src/test/TestData/b/c/JustPDF/Lorem1.pdf");
+//        ImageIO.scanForPlugins();
+//        Iterator<ImageReader> readers = ImageIO.getImageReadersByFormatName("JBIG2");
+//        suiteRun("FolderTestsApp", "src/test/TestData/b/c/JustPDF/Lorem2.pdf");
+//        suiteRun("FolderTestsApp", "src/test/TestData/b/c/JustPDF/Lorem1.pdf");
+        runWhitebox("Split_Barcode_rotate", "/Users/yanir/Downloads/Split_Barcode_rotate_001.pdf");
     }
 
     @Test
@@ -68,6 +74,6 @@ public class TestFolders extends Base {
 
     @Test
     public void testPostscript() {
-        suiteRun("FolderTestsApp", "src/test/TestData/b/c/JustPostscript/Lorem2.ps");
+        runWhitebox("FolderTestsApp", "src/test/TestData/b/c/JustPostscript/Lorem2.ps");
     }
 }

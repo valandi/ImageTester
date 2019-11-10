@@ -58,7 +58,6 @@ public class EyesFactory {
         if (StringUtils.isNotBlank(this.logFilename))
             eyes.setLogHandler(new FileLogger(this.logFilename, true, true));
 
-
         if (this.proxy != null && this.proxy.length > 0)
             if (proxy.length == 1) {
                 logger.reportDebug("Using proxy %s \n", proxy[0]);
