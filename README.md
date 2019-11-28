@@ -75,10 +75,12 @@ The tool build in java and requires minimal set of parameters the minimal comman
     + `-ap [browser name]` - Set browser or equivalent hosting application name
     + `-th [number]` - Specify max. concurrent workers (Threads). default= 3
     + `-fn [testName]` - Force all test names to be specific name. This will force all tests to be matched with a single baseline.
+    + `-fb [batchName]` - Set unified flat batch to contain all the discovered tests regardless their hierarchy.
+    - `-sq [sequenceName]` - Set batch sequenceName for unified insights in applitools' dashboard.
     + `-as` - Set automatic save on failures
     + `-st` - Split steps to individual tests
     + `-id` - Ignore displacement of shifting elements.
-    
+
     ###### For Documents (PDFs) only
     + `-di [dpi]` - Set the quality of the conversion on PDF files
     + `-sp [pages]` - Comma separated page numbers to include in PDF testing (ie: 1,2,5,7); Default all included
@@ -86,7 +88,7 @@ The tool build in java and requires minimal set of parameters the minimal comman
     + `-pn` - Preserve original directory test names when specifying pages
  
 ## Enterprise features in combination with [Eyes Utilities](https://github.com/yanirta/EyesUtilities)
-By placing the Eyes-Utilities jar into the same folder as the ImageTester, new enterprise api features
+By placing the Eyes-Utilities jar into the same folder as the com.yanirta.ImageTester, new enterprise api features
 made possible by providing an enterprise read-key.
 
 >java -jar ImageTester.jar -k [api-key] -vk [view-key] [options]

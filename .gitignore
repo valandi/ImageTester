@@ -3,3 +3,8 @@ out/
 target/
 *.iml
 *.jar
+Artifacts/
+debug/
+src/test/java/Private/
+src/test/TestData/Private/
+output
