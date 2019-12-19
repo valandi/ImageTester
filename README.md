@@ -98,7 +98,9 @@ made possible by providing an enterprise read-key.
 + Selective flags - Required one or more
     + `-gd` - Get diff images of the failed steps
     + `-gi` - Get images of the failed steps
-    + `-gd` - Get animated gifs of the failed steps
+    + `-gg` - Get animated gifs of the failed steps
++ Optional parameters and flags:
+    + `-of [path]` - Specify custom output path or path-template
     
 ## CI/CD integration
 Once setting the required environment variables, the ImageTester is able to pick them up and use to sync with the results
