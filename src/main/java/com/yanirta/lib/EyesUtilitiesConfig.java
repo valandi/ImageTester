@@ -77,7 +77,6 @@ public class EyesUtilitiesConfig {
         );
     }
 
-
     public String getViewKey() {
         return viewKey_;
     }
@@ -117,6 +116,5 @@ public class EyesUtilitiesConfig {
     public void setGetGifs(Boolean getGifs) {
         this.getGifs_ = getGifs;
     }
-
-
+    
 }

@@ -15,8 +15,13 @@ public class TestFullCommands {
     }
 
     @Test
-    public void testPDFSplitted(){
+    public void testPDFSplit(){
         ImageTester.main("-f src/test/TestData/b/c/JustPDF/Lorem3.pdf -th 10 -debug -st".split(" "));
+    }
+
+    @Test
+    public void PDFSplitWithUtilities(){
+        ImageTester.main("-f src/test/TestData/diffs/ -th 10 -debug -st -gg -of Artifacts".split(" "));
     }
 
     @Test

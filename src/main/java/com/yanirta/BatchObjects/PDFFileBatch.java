@@ -37,9 +37,16 @@ public class PDFFileBatch extends BatchBase {
         @Override
         public TestResults run(Eyes eyes) throws Exception {
             eyes.open(appName(), name(), viewport());
-            BufferedImage bim = parent_.pdfRenderer_.renderImageWithDPI(page_ - 1, config().DocumentConversionDPI);
+            logger_.reportDebug("Rendering page %s , num of pages %s\n", page_, parent_.document_.getNumberOfPages());
+            BufferedImage bim = safeRender();
             eyes.checkImage(bim, name());
             return eyes.close(false);
+        }
+
+        private BufferedImage safeRender() throws IOException {
+            synchronized (parent_) {
+                return parent_.pdfRenderer_.renderImageWithDPI(page_ - 1, config().DocumentConversionDPI);
+            }
         }
 
         @Override
