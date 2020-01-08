@@ -6,5 +6,5 @@ target/
 Artifacts/
 debug/
 src/test/java/Private/
-src/test/TestData/Private/
+TestData/Private/
 output
