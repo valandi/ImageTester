@@ -7,16 +7,14 @@ import org.apache.commons.cli.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
 
 public class ImageTester {
-    private static final String cur_ver = "1.2.2";
+    private static final String cur_ver = ImageTester.class.getPackage().getImplementationVersion();
     private static final String eyes_utils = "EyesUtilities.jar";
 
     private static boolean eyes_utils_enabled = false;
 
     public static void main(String[] args) {
-        PrintStream out = System.out;
         eyes_utils_enabled = new File(eyes_utils).exists();
         CommandLineParser parser = new DefaultParser();
         Options options = getOptions();
