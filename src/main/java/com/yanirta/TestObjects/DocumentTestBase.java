@@ -16,14 +16,18 @@ public abstract class DocumentTestBase extends TestBase {
 
     @Override
     public String name() {
+    	String testName;
+    	
         if (config().forcedName != null)
-            return file().getName();
+        	testName =  config().forcedName;
+        else
+        	testName =  file().getName();
 
         //Else
         String pagesText = "";
         if (config().pages != null && config().includePageNumbers)
             pagesText = " pages [" + config().pages + "]";
-        return file().getName() + pagesText;
+        return testName + pagesText;
     }
 
     @Override
