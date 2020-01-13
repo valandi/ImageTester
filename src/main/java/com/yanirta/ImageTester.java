@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 public class ImageTester {
-    private static final String cur_ver = "1.2.2";
+    private static final String cur_ver = "1.2.4";
     private static final String eyes_utils = "EyesUtilities.jar";
 
     private static boolean eyes_utils_enabled = false;
@@ -258,6 +258,7 @@ public class ImageTester {
         options.addOption(Option.builder("fn")
                 .longOpt("forcedName")
                 .desc("Force name for all tests, (will make all folders/files to be matched with a single baseline)")
+                .hasArg()
                 .argName("testName")
                 .build());
         if (eyes_utils_enabled) {
