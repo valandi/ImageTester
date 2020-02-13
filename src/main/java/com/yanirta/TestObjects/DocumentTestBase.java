@@ -16,12 +16,7 @@ public abstract class DocumentTestBase extends TestBase {
 
     @Override
     public String name() {
-    	String testName;
-    	
-        if (config().forcedName != null)
-        	testName =  config().forcedName;
-        else
-        	testName =  file().getName();
+    	String testName = super.name();
 
         //Else
         String pagesText = "";

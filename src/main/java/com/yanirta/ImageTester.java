@@ -256,6 +256,7 @@ public class ImageTester {
         options.addOption(Option.builder("fn")
                 .longOpt("forcedName")
                 .desc("Force name for all tests, (will make all folders/files to be matched with a single baseline)")
+                .hasArg()
                 .argName("testName")
                 .build());
         if (eyes_utils_enabled) {
