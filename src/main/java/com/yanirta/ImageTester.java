@@ -251,6 +251,7 @@ public class ImageTester {
         options.addOption(Option.builder("fb")
                 .longOpt("flatbatch")
                 .desc("Aggregate all test results in a single batch (aka flat-batch)")
+                .hasArg()
                 .argName("name")
                 .build());
         options.addOption(Option.builder("fn")
