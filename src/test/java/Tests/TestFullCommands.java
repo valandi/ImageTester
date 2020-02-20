@@ -6,6 +6,11 @@ import org.junit.Test;
 public class TestFullCommands {
 
     @Test
+    public void testPDFforcedNamePromptNew() {
+        ImageTester.main("-f TestData/b/Lorem1.pdf -fn MyNewName -pn".split(" "));
+    }
+
+    @Test
     public void testPDFforcedName() {
         ImageTester.main("-f TestData/b/Lorem1.pdf -fn MyForcedName".split(" "));
     }

@@ -21,6 +21,7 @@ public class EyesFactory {
     private String hostApp;
     private boolean saveFailed = false;
     private boolean ignoreDisplacement = false;
+    private boolean saveNewTests = false;
 
     public EyesFactory(String ver, Logger logger) {
         this.version = ver;
@@ -39,6 +40,7 @@ public class EyesFactory {
         //flags
         eyes.setSaveFailedTests(saveFailed);
         eyes.setIgnoreDisplacements(ignoreDisplacement);
+        eyes.setSaveNewTests(saveNewTests);
 
         //String params
         if (StringUtils.isNotBlank(this.serverUrl))
@@ -57,7 +59,6 @@ public class EyesFactory {
             eyes.setHostApp(this.hostApp);
         if (StringUtils.isNotBlank(this.logFilename))
             eyes.setLogHandler(new FileLogger(this.logFilename, true, true));
-
         if (this.proxy != null && this.proxy.length > 0)
             if (proxy.length == 1) {
                 logger.reportDebug("Using proxy %s \n", proxy[0]);
@@ -131,6 +132,11 @@ public class EyesFactory {
 
     public EyesFactory ignoreDisplacement(boolean ignore) {
         this.ignoreDisplacement = ignore;
+        return this;
+    }
+
+    public EyesFactory saveNewTests(boolean save) {
+        this.saveNewTests = save;
         return this;
     }
 }

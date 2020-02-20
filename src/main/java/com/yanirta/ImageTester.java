@@ -42,7 +42,8 @@ public class ImageTester {
                     .hostOs(cmd.getOptionValue("os", null))
                     .hostApp(cmd.getOptionValue("ap"))
                     .saveFaliedTests(cmd.hasOption("as"))
-                    .ignoreDisplacement(cmd.hasOption("id"));
+                    .ignoreDisplacement(cmd.hasOption("id"))
+                    .saveNewTests(!cmd.hasOption("pn"));
 
             Config config = new Config();
             config.splitSteps = cmd.hasOption("st");
@@ -235,6 +236,10 @@ public class ImageTester {
         options.addOption(Option.builder("debug")
                 .hasArg(false)
                 .desc("Turn on debug prints")
+                .build());
+        options.addOption(Option.builder("pn")
+                .hasArg(false)
+                .desc("Prompt new tests")
                 .build());
         options.addOption(Option.builder("pp")
                 .longOpt("PDFPassword")

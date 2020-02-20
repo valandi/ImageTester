@@ -80,6 +80,7 @@ The tool build in java and requires minimal set of parameters the minimal comman
     + `-as` - Set automatic save on failures
     + `-st` - Split steps to individual tests
     + `-id` - Ignore displacement of shifting elements.
+    + `-pn` - Prompt new tests, new tests will not be saved automatically, the user will have to review and save manually.
 
     ###### For Documents (PDFs) only
     + `-di [dpi]` - Set the quality of the conversion on PDF files
