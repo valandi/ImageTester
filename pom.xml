@@ -11,6 +11,9 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <!-- Important,
+        make sure that you sync. manually the version with the one in
+        resources/META-INF/MANIFEST.MF -->
         <project.version>1.3.1</project.version>
     </properties>
 
@@ -104,6 +107,7 @@
                 </configuration>
             </plugin>
             <!--Maven assembly plugin-->
+            <!--Activate via Lifecycle->package operation-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
