@@ -36,9 +36,10 @@ public class PDFFileBatch extends BatchBase {
 
         @Override
         public TestResults run(Eyes eyes) throws Exception {
-            eyes.open(appName(), name(), viewport());
-            logger_.reportDebug("Rendering page %s , num of pages %s\n", page_, parent_.document_.getNumberOfPages());
+            logger_.reportDebug("Rendering page %s ,num of pages %s\n", page_, parent_.document_.getNumberOfPages());
             BufferedImage bim = safeRender();
+            if (!eyes.getIsOpen())
+                eyes.open(appName(), name(), viewport(bim));
             eyes.checkImage(bim, name());
             return eyes.close(false);
         }

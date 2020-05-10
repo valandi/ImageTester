@@ -15,11 +15,11 @@ public class ImageFileTest extends TestBase {
 
     @Override
     public TestResults run(Eyes eyes) throws Exception {
-        eyes.open(appName(), name(), viewport());
         BufferedImage image = ImageIO.read(file());
+        eyes.open(appName(), name(), viewport(image));
         eyes.checkImage(image, name());
         image = null;
-        return eyes.close();
+        return eyes.close(false);
     }
 
     @Override

@@ -38,11 +38,12 @@ public class PostscriptFileBatch extends BatchBase {
         public TestResults run(Eyes eyes) throws Exception {
             Graphics2D bGr = null;
             try {
-                eyes.open(appName(), name(), viewport());
                 BufferedImage image = new BufferedImage(
                         image_.getWidth(null),
                         image_.getHeight(null),
                         BufferedImage.TYPE_INT_ARGB);
+                if (!eyes.getIsOpen())
+                    eyes.open(appName(), name(), viewport(image));
                 // Draw the image on to the buffered image
                 bGr = image.createGraphics();
                 bGr.drawImage(image_, 0, 0, null);

@@ -26,14 +26,14 @@ public class PdfFileTest extends DocumentTestBase {
             if (pageList_ == null || pageList_.isEmpty())
                 pageList_ = Utils.generateRanage(document.getNumberOfPages() + 1, 1);
             PDFRenderer pdfRenderer = new PDFRenderer(document);
-            eyes.open(appName(), name(), viewport());
             for (Integer page : pageList_) {
                 try {
                     BufferedImage bim = pdfRenderer.renderImageWithDPI(page - 1, config().DocumentConversionDPI);
                     logger().logPage(bim, name(), page);
-
+                    if (!eyes.getIsOpen())
+                        eyes.open(appName(), name(), viewport(bim));
                     eyes.checkImage(bim, String.format("Page-%s", page));
-                } catch (SocketException e){
+                } catch (SocketException e) {
                     logger().reportException(e, file().getAbsolutePath());
                 } catch (IOException e) {
                     logger().reportException(e, file().getAbsolutePath());

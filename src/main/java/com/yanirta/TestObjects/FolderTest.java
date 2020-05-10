@@ -1,5 +1,6 @@
 package com.yanirta.TestObjects;
 
+import com.applitools.eyes.RectangleSize;
 import com.applitools.eyes.TestResults;
 import com.applitools.eyes.images.Eyes;
 import com.yanirta.lib.Config;
@@ -23,10 +24,11 @@ public class FolderTest extends TestBase {
     }
 
     public TestResults run(Eyes eyes) throws Exception {
-        eyes.open(appName(), name(), viewport());
         for (File img : steps_) {
             try {
                 BufferedImage image = ImageIO.read(img);
+                if (!eyes.getIsOpen())
+                    eyes.open(appName(), name(), viewport(image));
                 eyes.checkImage(image, img.getName());
                 image = null;
             } catch (IOException e) {

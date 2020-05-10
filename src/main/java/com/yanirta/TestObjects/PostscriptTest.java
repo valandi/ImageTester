@@ -24,7 +24,6 @@ public class PostscriptTest extends DocumentTestBase {
 
         document.load(file());
         List<Image> images = renderer.render(document);
-        eyes.open(appName(), name(), config().viewport);
         int page = 0;
         for (Image step : images) {
             ++page;
@@ -34,6 +33,8 @@ public class PostscriptTest extends DocumentTestBase {
                     step.getWidth(null),
                     step.getHeight(null),
                     BufferedImage.TYPE_INT_ARGB);
+            if (!eyes.getIsOpen())
+                eyes.open(appName(), name(), viewport(image));
             // Draw the image on to the buffered image
             Graphics2D bGr = image.createGraphics();
             bGr.drawImage(step, 0, 0, null);

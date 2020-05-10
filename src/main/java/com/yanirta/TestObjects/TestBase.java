@@ -7,6 +7,7 @@ import com.yanirta.lib.Config;
 import com.yanirta.lib.Logger;
 import com.yanirta.lib.Utils;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 public abstract class TestBase implements ITest {
@@ -31,8 +32,16 @@ public abstract class TestBase implements ITest {
         return this.conf_.appName;
     }
 
-    public RectangleSize viewport() {
+    @Override
+    public RectangleSize viewport(BufferedImage image) {
+        if (this.conf_.viewport == null && image != null)
+            return new RectangleSize(image.getWidth(), image.getHeight());
         return this.conf_.viewport;
+    }
+
+    @Override
+    public RectangleSize viewport() {
+        return viewport(null);
     }
 
     public String name() {
@@ -44,7 +53,7 @@ public abstract class TestBase implements ITest {
 
     public TestResults runSafe(Eyes eyes) {
         try {
-            if (conf_.forcedName != null)//In case the name is overridden, we will use property to store the name.
+            if (conf_.forcedName != null) //In case the name is overridden, we will use property to store the name.
                 eyes.addProperty(ORIGINAL_NAME, file_.getName());
             TestResults res = run(eyes);
             Utils.handleResultsDownload(conf_.eyesUtilsConf, res);
