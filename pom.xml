@@ -44,7 +44,7 @@
         <dependency>
             <groupId>com.applitools</groupId>
             <artifactId>eyes-images-java3</artifactId>
-            <version>3.160.0</version>
+            <version>3.161.0</version>
         </dependency>
         <dependency>
             <groupId>org.ghost4j</groupId>
