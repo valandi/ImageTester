@@ -7,6 +7,8 @@ import org.apache.commons.cli.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 
 public class ImageTester {
     private static final String cur_ver = ImageTester.class.getPackage().getImplementationVersion();
@@ -25,8 +27,13 @@ public class ImageTester {
             logger.setDebug(cmd.hasOption("debug"));
             logger.printVersion(cur_ver);
 
-            if (cmd.getOptions().length == 0)
+            if (cmd.getOptions().length == 0) {
                 logger.printHelp(options);
+                return;
+            }
+
+            if (cmd.hasOption("dv"))
+                Utils.disableCertValidation();
 
             // Eyes factory
             EyesFactory factory
@@ -93,6 +100,10 @@ public class ImageTester {
             logger.reportException(e);
             logger.printHelp(options);
             System.exit(-1);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
         }
     }
 
@@ -240,6 +251,10 @@ public class ImageTester {
         options.addOption(Option.builder("pn")
                 .hasArg(false)
                 .desc("Prompt new tests")
+                .build());
+        options.addOption(Option.builder("dv")
+                .hasArg(false)
+                .desc("Disable SSL certificate validation. !!!Unsecured!!!")
                 .build());
         options.addOption(Option.builder("pp")
                 .longOpt("PDFPassword")
