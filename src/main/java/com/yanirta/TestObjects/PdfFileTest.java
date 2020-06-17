@@ -33,6 +33,8 @@ public class PdfFileTest extends DocumentTestBase {
                     if (!eyes.getIsOpen())
                         eyes.open(appName(), name(), viewport(bim));
                     eyes.checkImage(bim, String.format("Page-%s", page));
+                    bim.getGraphics().dispose();
+                    bim.flush();
                 } catch (SocketException e) {
                     logger().reportException(e, file().getAbsolutePath());
                 } catch (IOException e) {

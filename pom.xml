@@ -14,7 +14,7 @@
         <!-- Important,
         make sure that you sync. manually the version with the one in
         resources/META-INF/MANIFEST.MF -->
-        <project.version>1.4.0</project.version>
+        <project.version>1.4.1</project.version>
     </properties>
 
     <dependencies>
@@ -44,7 +44,7 @@
         <dependency>
             <groupId>com.applitools</groupId>
             <artifactId>eyes-images-java3</artifactId>
-            <version>3.161.0</version>
+            <version>3.164.1</version>
         </dependency>
         <dependency>
             <groupId>org.ghost4j</groupId>

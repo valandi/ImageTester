@@ -22,11 +22,22 @@ public class TestFullCommands {
 
     @Test
     public void testFolderSimple() {
-        ImageTester.main("-f TestData -debug".split(" "));
+        ImageTester.main("-f TestData -th 10 -di 200".split(" "));
     }
 
     @Test
+    public void testFolderSimpleDebug() {
+        ImageTester.main("-f TestData -debug".split(" "));
+    }
+
+
+    @Test
     public void testPDFSimple() {
+        ImageTester.main("-f TestData/b/c/JustPDF/Lorem2.pdf".split(" "));
+    }
+
+    @Test
+    public void testPDFSimpleDebug() {
         ImageTester.main("-f TestData/b/c/JustPDF/Lorem2.pdf -debug".split(" "));
     }
 
