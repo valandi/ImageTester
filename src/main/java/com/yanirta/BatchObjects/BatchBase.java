@@ -13,6 +13,7 @@ public abstract class BatchBase implements IBatch {
 
     public BatchBase(BatchInfo batchInfo) {
         this.batchInfo_ = batchInfo;
+        this.batchInfo_.setNotifyOnCompletion(true);
     }
 
     public void addTests(List<TestBase> test) {
@@ -34,5 +35,9 @@ public abstract class BatchBase implements IBatch {
 
     public BatchInfo batchInfo() {
         return this.batchInfo_;
+    }
+
+    public void setCompleted() {
+        this.batchInfo_.setCompleted(true);
     }
 }

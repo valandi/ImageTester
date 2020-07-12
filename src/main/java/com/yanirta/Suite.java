@@ -80,6 +80,9 @@ public class Suite {
             batch.run(executor_);
 
         executor_.join();
+        //Setting batches as completed
+        for (BatchBase batch : batches_)
+            batch.setCompleted();
     }
 
     private static boolean is(File file, Pattern pattern) {

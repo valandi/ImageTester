@@ -14,7 +14,7 @@
         <!-- Important,
         make sure that you sync. manually the version with the one in
         resources/META-INF/MANIFEST.MF -->
-        <project.version>1.4.1</project.version>
+        <project.version>1.4.2</project.version>
     </properties>
 
     <dependencies>
