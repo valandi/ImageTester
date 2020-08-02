@@ -65,7 +65,8 @@ public class Logger {
     public void reportResult(ExecutorResult result) {
         printPrefix();
         if (debug_) out_.printf("[%d Msec] ", TimeUnit.NANOSECONDS.toMillis(result.runTimeNs));
-        out_.printf("Test finished, %s \n", result.testResult);
+        String status = result.testResult != null ? result.testResult.getStatus().toString() : "N/A";
+        out_.printf("[%s], %s \n", status, result.testResult);
     }
 
     public void reportException(Throwable e) {

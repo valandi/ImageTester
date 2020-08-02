@@ -37,6 +37,12 @@ public class TestFullCommands {
     }
 
     @Test
+    public void testPDFFolder() {
+        ImageTester.main("-f TestData/b/c/JustPDF/".split(" "));
+    }
+
+
+    @Test
     public void testPDFSimpleDebug() {
         ImageTester.main("-f TestData/b/c/JustPDF/Lorem2.pdf -debug".split(" "));
     }
