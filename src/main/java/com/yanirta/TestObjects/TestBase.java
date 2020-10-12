@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 public abstract class TestBase implements ITest {
-    private static final String ORIGINAL_NAME = "originalName";
+    private static final String FILE_NAME_PROP = "Filename";
     private final File file_;
     private final Config conf_;
 
@@ -53,8 +53,7 @@ public abstract class TestBase implements ITest {
 
     public TestResults runSafe(Eyes eyes) {
         try {
-            if (conf_.forcedName != null) //In case the name is overridden, we will use property to store the name.
-                eyes.addProperty(ORIGINAL_NAME, file_.getName());
+            eyes.addProperty(FILE_NAME_PROP, file_.getName());
             TestResults res = run(eyes);
             Utils.handleResultsDownload(conf_.eyesUtilsConf, res);
             return res;
