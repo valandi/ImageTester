@@ -64,6 +64,7 @@ public class ImageTester {
             config.forcedName = cmd.getOptionValue("fn", null);
             config.sequenceName = cmd.getOptionValue("sq", null);
             config.setViewport(cmd.getOptionValue("vs", null));
+            config.notifyOnComplete = cmd.hasOption("nc");
 
             String ciJobName = System.getenv("JOB_NAME");
             String ciApplitoolsBatchId = System.getenv("APPLITOOLS_BATCH_ID");
@@ -279,6 +280,11 @@ public class ImageTester {
                 .desc("Force name for all tests, (will make all folders/files to be matched with a single baseline)")
                 .hasArg()
                 .argName("testName")
+                .build());
+        options.addOption(Option.builder("nc")
+                .longOpt("notifyComplition")
+                .desc("Send batch notifications on completion")
+                .hasArg(false)
                 .build());
         if (eyes_utils_enabled) {
             System.out.printf("%s is integrated, extra features are available. \n", eyes_utils);

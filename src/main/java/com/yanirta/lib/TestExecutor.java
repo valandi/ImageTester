@@ -25,6 +25,8 @@ public class TestExecutor {
         this.logger_ = conf.logger;
         this.flatBatch_ = conf.flatBatch;
         this.sequenceName_ = conf.sequenceName;
+        if(this.flatBatch_!=null)
+            this.flatBatch_.setNotifyOnCompletion(conf.notifyOnComplete);
     }
 
     public void enqueue(TestBase test, BatchInfo batch) {

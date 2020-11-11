@@ -1,5 +1,6 @@
 package com.yanirta;
 
+import com.applitools.eyes.fluent.BatchClose;
 import com.yanirta.BatchObjects.Batch;
 import com.yanirta.BatchObjects.BatchBase;
 import com.yanirta.BatchObjects.PostscriptFileBatch;
@@ -13,6 +14,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Suite {
     private final TestExecutor executor_;
@@ -59,7 +61,7 @@ public class Suite {
                     tests_.add(test);
             }
 
-            Batch currBatch = new Batch(file);
+            Batch currBatch = new Batch(file, conf);
 
             for (File child : file.listFiles()) {
                 Suite curr = new Suite(child, conf, executor);
@@ -80,9 +82,13 @@ public class Suite {
             batch.run(executor_);
 
         executor_.join();
+
         //Setting batches as completed
+        List<String> batchIds = new ArrayList<>();
         for (BatchBase batch : batches_)
-            batch.setCompleted();
+            batchIds.add(batch.batchInfo().getId());
+        BatchClose batchClose = new BatchClose();
+        batchClose.setBatchId(batchIds.stream().distinct().collect(Collectors.toList())).close();
     }
 
     private static boolean is(File file, Pattern pattern) {
