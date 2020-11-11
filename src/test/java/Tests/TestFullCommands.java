@@ -71,4 +71,14 @@ public class TestFullCommands {
     public void testWithSecureProxy(){
         ImageTester.main("-f TestData/b/c/JustPDF/Lorem3.pdf -th 10 -sp 1,2,4-5 -pr http://my.proxy.com:8080,user,pass -debug -st".split(" "));
     }
+
+    @Test
+    public void testBatchNotifications() {
+        ImageTester.main("-f TestData/b/c/JustPDF/Lorem2.pdf -nc".split(" "));
+    }
+
+    @Test
+    public void testPDFFolderWithBatchNotifications() {
+        ImageTester.main("-f TestData/b/c/JustPDF/ -nc".split(" "));
+    }
 }

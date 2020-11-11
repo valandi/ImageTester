@@ -16,6 +16,7 @@ public class Config {
     public BatchInfo flatBatch = null;
     public String forcedName = null;
     public String sequenceName = null;
+    public boolean notifyOnComplete = false;
 
     public void setViewport(String viewport) {
         if (viewport == null) return;
