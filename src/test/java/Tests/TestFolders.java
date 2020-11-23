@@ -43,7 +43,7 @@ public class TestFolders extends TestBase {
 
     @Test
     public void testSingleImage() {
-        runWhitebox("FolderTestsApp", "src/test/TestData/b/c/googleforgoogle.png");
+        runWhitebox("FolderTestsApp", "TestData/b/c/googleforgoogle.png");
     }
 
     @Test(expected = RuntimeException.class)
