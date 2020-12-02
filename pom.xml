@@ -111,6 +111,7 @@
                     <skipTests>true</skipTests>
                 </configuration>
             </plugin>
+
             <!--Maven assembly plugin-->
             <!--Activate via Lifecycle->package operation-->
             <plugin>
@@ -124,12 +125,12 @@
                             <goal>single</goal>
                         </goals>
                         <configuration>
+                            <descriptors>
+                                <descriptor>${project.basedir}/src/assembly/jar-with-deps.xml</descriptor>
+                            </descriptors>
                             <archive>
                                 <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
                             </archive>
-                            <descriptorRefs>
-                                <descriptorRef>jar-with-dependencies</descriptorRef>
-                            </descriptorRefs>
                             <appendAssemblyId>false</appendAssemblyId>
                         </configuration>
                     </execution>
