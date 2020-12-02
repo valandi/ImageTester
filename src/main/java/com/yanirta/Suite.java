@@ -88,7 +88,8 @@ public class Suite {
         for (BatchBase batch : batches_)
             batchIds.add(batch.batchInfo().getId());
         BatchClose batchClose = new BatchClose();
-        batchClose.setBatchId(batchIds.stream().distinct().collect(Collectors.toList())).close();
+        if (!batchIds.isEmpty())
+            batchClose.setBatchId(batchIds.stream().distinct().collect(Collectors.toList())).close();
     }
 
     private static boolean is(File file, Pattern pattern) {

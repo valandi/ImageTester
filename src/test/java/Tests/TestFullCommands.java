@@ -63,7 +63,7 @@ public class TestFullCommands {
     }
 
     @Test
-    public void testPDFPagesSplitted(){
+    public void testPDFPagesSplit(){
         ImageTester.main("-f TestData/b/c/JustPDF/Lorem3.pdf -th 10 -sp 1,2,4-5 -debug -st".split(" "));
     }
 
