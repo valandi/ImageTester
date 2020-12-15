@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 public class Suite {
     private final TestExecutor executor_;
+    private final Config config_;
     private List<TestBase> tests_ = new ArrayList<>();
     private List<BatchBase> batches_ = new ArrayList<>();
 
@@ -29,7 +30,8 @@ public class Suite {
 
     private Suite(File file, Config conf, TestExecutor executor) {
         conf.logger.reportDiscovery(file);
-        this.executor_ = executor;
+        executor_ = executor;
+        config_ = conf;
         if (!file.exists())
             throw new RuntimeException(
                     String.format("Fatal! The path %s does not exists \n", file.getAbsolutePath()));
@@ -73,6 +75,8 @@ public class Suite {
         } catch (Exception e) {
             conf.logger.reportException(e, file.getAbsolutePath());
         }
+
+
     }
 
     public void run() {
@@ -87,9 +91,15 @@ public class Suite {
         List<String> batchIds = new ArrayList<>();
         for (BatchBase batch : batches_)
             batchIds.add(batch.batchInfo().getId());
-        BatchClose batchClose = new BatchClose();
-        if (!batchIds.isEmpty())
+        if (!batchIds.isEmpty()) {
+            BatchClose batchClose = new BatchClose();
+            batchClose.setApiKey(config_.apiKey);
+            if (config_.serverUrl != null)
+                batchClose.setUrl(config_.serverUrl);
+            if (config_.proxy_settings != null)
+                batchClose.setProxy(config_.proxy_settings);
             batchClose.setBatchId(batchIds.stream().distinct().collect(Collectors.toList())).close();
+        }
     }
 
     private static boolean is(File file, Pattern pattern) {

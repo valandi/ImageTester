@@ -35,13 +35,18 @@ public class ImageTester {
             if (cmd.hasOption("dv"))
                 Utils.disableCertValidation();
 
+            Config config = new Config();
+            config.apiKey = cmd.getOptionValue("k", System.getenv("APPLITOOLS_API_KEY"));
+            config.serverUrl = cmd.getOptionValue("s", null);
+            config.setProxy(cmd.getOptionValues("p"));
+
             // Eyes factory
             EyesFactory factory
                     = new EyesFactory(cur_ver, logger)
-                    .apiKey(cmd.getOptionValue("k", System.getenv("APPLITOOLS_API_KEY")))
-                    .serverUrl(cmd.getOptionValue("s", null))
+                    .apiKey(config.apiKey)
+                    .serverUrl(config.serverUrl)
+                    .proxySettings(config.proxy_settings)
                     .matchLevel(cmd.getOptionValue("ml", null))
-                    .proxy(cmd.getOptionValues("p"))
                     .branch(cmd.getOptionValue("br", null))
                     .parentBranch(cmd.getOptionValue("pb", null))
                     .baselineEnvName(cmd.getOptionValue("bn", null))
@@ -52,7 +57,7 @@ public class ImageTester {
                     .ignoreDisplacement(cmd.hasOption("id"))
                     .saveNewTests(!cmd.hasOption("pn"));
 
-            Config config = new Config();
+
             config.splitSteps = cmd.hasOption("st");
             config.logger = logger;
 

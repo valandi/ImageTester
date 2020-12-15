@@ -12,7 +12,7 @@ public class EyesFactory {
     private String apiKey;
     private String serverUrl;
     private String matchLevel;
-    private String[] proxy;
+    private ProxySettings proxySettings;
     private String branch;
     private String parentBranch;
     private String envName;
@@ -59,15 +59,8 @@ public class EyesFactory {
             eyes.setHostApp(this.hostApp);
         if (StringUtils.isNotBlank(this.logFilename))
             eyes.setLogHandler(new FileLogger(this.logFilename, true, true));
-        if (this.proxy != null && this.proxy.length > 0)
-            if (proxy.length == 1) {
-                logger.reportDebug("Using proxy %s \n", proxy[0]);
-                eyes.setProxy(new ProxySettings(proxy[0]));
-            } else if (proxy.length == 3) {
-                logger.reportDebug("Using proxy %s with user %s and pass %s \n", proxy[0], proxy[1], proxy[2]);
-                eyes.setProxy(new ProxySettings(proxy[0], proxy[1], proxy[2]));
-            } else
-                throw new RuntimeException("Proxy setting are invalid");
+        if (this.proxySettings != null)
+            eyes.setProxy(proxySettings);
 
         if (StringUtils.isNotBlank(this.parentBranch) && StringUtils.isBlank(this.branch))
             throw new RuntimeException("Parent Branches (pb) should be combined with branches (br).");
@@ -90,8 +83,8 @@ public class EyesFactory {
         return this;
     }
 
-    public EyesFactory proxy(String[] proxy) {
-        this.proxy = proxy;
+    public EyesFactory proxySettings(ProxySettings proxySettings) {
+        this.proxySettings = proxySettings;
         return this;
     }
 
