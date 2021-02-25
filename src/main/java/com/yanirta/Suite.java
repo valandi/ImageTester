@@ -88,17 +88,20 @@ public class Suite {
         executor_.join();
 
         //Setting batches as completed
-        List<String> batchIds = new ArrayList<>();
-        for (BatchBase batch : batches_)
-            batchIds.add(batch.batchInfo().getId());
-        if (!batchIds.isEmpty()) {
-            BatchClose batchClose = new BatchClose();
-            batchClose.setApiKey(config_.apiKey);
-            if (config_.serverUrl != null)
-                batchClose.setUrl(config_.serverUrl);
-            if (config_.proxy_settings != null)
-                batchClose.setProxy(config_.proxy_settings);
-            batchClose.setBatchId(batchIds.stream().distinct().collect(Collectors.toList())).close();
+        if (config_.notifyOnComplete) {
+            config_.logger.reportDebug("Closing batches...");
+            List<String> batchIds = new ArrayList<>();
+            for (BatchBase batch : batches_)
+                batchIds.add(batch.batchInfo().getId());
+            if (!batchIds.isEmpty()) {
+                BatchClose batchClose = new BatchClose();
+                batchClose.setApiKey(config_.apiKey);
+                if (config_.serverUrl != null)
+                    batchClose.setUrl(config_.serverUrl);
+                if (config_.proxy_settings != null)
+                    batchClose.setProxy(config_.proxy_settings);
+                batchClose.setBatchId(batchIds.stream().distinct().collect(Collectors.toList())).close();
+            }
         }
     }
 

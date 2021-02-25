@@ -98,7 +98,7 @@ public class ImageTester {
             }
 
             suite.run();
-
+            System.exit(0);
         } catch (ParseException e) {
             logger.reportException(e);
             logger.printHelp(options);
@@ -186,7 +186,7 @@ public class ImageTester {
 
         options.addOption(Option.builder("vs")
                 .longOpt("viewportsize")
-                .desc("Declare viewport size identifier <width>x<height> ie. 1000x600, if not set,default will be the first image in every test")
+                .desc("Declare viewport size identifier <width>x<height> ie. 1000x600, if not set,default will be first image's size of every test")
                 .hasArg()
                 .argName("size")
                 .build());
