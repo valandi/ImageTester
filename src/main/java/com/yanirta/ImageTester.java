@@ -70,6 +70,8 @@ public class ImageTester {
             config.sequenceName = cmd.getOptionValue("sq", null);
             config.setViewport(cmd.getOptionValue("vs", null));
             config.notifyOnComplete = cmd.hasOption("nc");
+            config.setMatchSize(cmd.getOptionValue("ms", null));
+
 
             String ciJobName = System.getenv("JOB_NAME");
             String ciApplitoolsBatchId = System.getenv("APPLITOOLS_BATCH_ID");
@@ -187,6 +189,12 @@ public class ImageTester {
         options.addOption(Option.builder("vs")
                 .longOpt("viewportsize")
                 .desc("Declare viewport size identifier <width>x<height> ie. 1000x600, if not set,default will be first image's size of every test")
+                .hasArg()
+                .argName("size")
+                .build());
+        options.addOption(Option.builder("ms")
+                .longOpt("matchsize")
+                .desc("Match the size of the images to a specific width/height ie. `1000x`- adjust by width, `x600`-adjust by height, `1000x600`- fit to the exact size, note, may loose proportions")
                 .hasArg()
                 .argName("size")
                 .build());

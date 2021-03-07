@@ -19,4 +19,10 @@ public class TestUtilities extends TestBase {
     public void getImagesWithOutputfolder(){
         runBlackBox("src/test/TestData/b/c/JustPDF/Lorem3.pdf", "-of output -gi -st -th 5");
     }
+
+    @Test
+    public void aVoid(){
+        String[] x = "x1000".split("x");
+        return;
+    }
 }

@@ -6,9 +6,13 @@ import com.applitools.eyes.images.Eyes;
 import com.yanirta.lib.Config;
 import com.yanirta.lib.Logger;
 import com.yanirta.lib.Utils;
+import org.apache.commons.lang.StringUtils;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 public abstract class TestBase implements ITest {
     private static final String FILE_NAME_PROP = "Filename";
@@ -69,5 +73,34 @@ public abstract class TestBase implements ITest {
 
     public Logger logger() {
         return conf_.logger;
+    }
+
+    protected BufferedImage getImage(File img) throws IOException {
+        BufferedImage bim = ImageIO.read(img);
+        if (StringUtils.isNotBlank(conf_.matchWidth) || StringUtils.isNotBlank(conf_.matchHeight)) {
+            //Resize the image
+            Dimension dim = getNewDimensions_(bim.getWidth(), bim.getHeight());
+            BufferedImage resizedImage = new BufferedImage(dim.width, dim.height, BufferedImage.TYPE_INT_RGB);
+            Graphics2D graphics2D = resizedImage.createGraphics();
+            graphics2D.drawImage(bim, 0, 0, dim.width, dim.height, null);
+            graphics2D.dispose();
+            bim = null; //perhaps a better disposal required
+            bim = resizedImage;
+        }
+        return bim;
+    }
+
+    private Dimension getNewDimensions_(int oldWidth, int oldHeight) {
+        if (StringUtils.isNotBlank(conf_.matchWidth) && StringUtils.isNotBlank(conf_.matchHeight))
+            return new Dimension(Integer.parseInt(conf_.matchWidth), Integer.parseInt(conf_.matchHeight));
+        else if (StringUtils.isNotBlank(conf_.matchWidth)) {
+            // scale by width
+            float ratio = Float.parseFloat(conf_.matchWidth) / oldWidth;
+            return new Dimension(Integer.parseInt(conf_.matchWidth), Math.round(oldHeight * ratio));
+        } else if (StringUtils.isNotBlank(conf_.matchHeight)) {
+            // scale by height
+            float ratio = Float.parseFloat(conf_.matchHeight) / oldHeight;
+            return new Dimension(Math.round(oldWidth * ratio), Integer.parseInt(conf_.matchHeight));
+        } else throw new RuntimeException("The new dimensions were not provided correctly");
     }
 }

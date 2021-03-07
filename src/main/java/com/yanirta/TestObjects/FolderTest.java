@@ -26,7 +26,7 @@ public class FolderTest extends TestBase {
     public TestResults run(Eyes eyes) throws Exception {
         for (File img : steps_) {
             try {
-                BufferedImage image = ImageIO.read(img);
+                BufferedImage image = getImage(img);
                 if (!eyes.getIsOpen())
                     eyes.open(appName(), name(), viewport(image));
                 eyes.checkImage(image, img.getName());

@@ -21,6 +21,8 @@ public class Config {
     public String apiKey;
     public String serverUrl;
     public ProxySettings proxy_settings = null;
+    public String matchWidth = null;
+    public String matchHeight = null;
 
     public void setViewport(String viewport) {
         if (viewport == null) return;
@@ -42,5 +44,15 @@ public class Config {
                 proxy_settings = new ProxySettings(proxy[0], proxy[1], proxy[2]);
             } else
                 throw new RuntimeException("Proxy setting are invalid");
+    }
+
+    public void setMatchSize(String size) {
+        if (size == null)
+            return;
+        String[] dims = size.split("x");
+        matchWidth = dims[0];
+        if (dims.length > 1)
+            matchHeight = dims[1];
+        return;
     }
 }

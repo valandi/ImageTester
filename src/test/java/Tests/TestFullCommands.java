@@ -48,27 +48,27 @@ public class TestFullCommands {
     }
 
     @Test
-    public void testPDFSplit(){
+    public void testPDFSplit() {
         ImageTester.main("-f TestData/b/c/JustPDF/Lorem3.pdf -th 10 -debug -st".split(" "));
     }
 
     @Test
-    public void PDFSplitWithUtilities(){
+    public void PDFSplitWithUtilities() {
         ImageTester.main("-f TestData/diffs/ -th 10 -debug -st -gg -of Artifacts".split(" "));
     }
 
     @Test
-    public void testPDFPages(){
+    public void testPDFPages() {
         ImageTester.main("-f TestData/b/c/JustPDF/Lorem3.pdf -th 10 -sp 1,2,4-5 -debug".split(" "));
     }
 
     @Test
-    public void testPDFPagesSplit(){
+    public void testPDFPagesSplit() {
         ImageTester.main("-f TestData/b/c/JustPDF/Lorem3.pdf -th 10 -sp 1,2,4-5 -debug -st".split(" "));
     }
 
     @Test
-    public void testWithSecureProxy(){
+    public void testWithSecureProxy() {
         ImageTester.main("-f TestData/b/c/JustPDF/Lorem3.pdf -th 10 -sp 1,2,4-5 -pr http://my.proxy.com:8080,user,pass -debug -st".split(" "));
     }
 
@@ -80,5 +80,25 @@ public class TestFullCommands {
     @Test
     public void testPDFFolderWithBatchNotifications() {
         ImageTester.main("-f TestData/b/c/JustPDF/ -nc".split(" "));
+    }
+
+    @Test
+    public void testImageScaling1() {
+        ImageTester.main("-f TestData/a -ms 1000".split(" "));
+    }
+
+    @Test
+    public void testImageScaling2() {
+        ImageTester.main("-f TestData/a -ms x1000".split(" "));
+    }
+
+    @Test
+    public void testImageScaling3() {
+        ImageTester.main("-f TestData/a -ms 1000x1000".split(" "));
+    }
+
+    @Test
+    public void testImageScaling4() {
+        ImageTester.main("-f TestData/a -ms 1000x".split(" "));
     }
 }
