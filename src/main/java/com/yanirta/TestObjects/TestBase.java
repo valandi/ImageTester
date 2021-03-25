@@ -6,7 +6,7 @@ import com.applitools.eyes.images.Eyes;
 import com.yanirta.lib.Config;
 import com.yanirta.lib.Logger;
 import com.yanirta.lib.Utils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
