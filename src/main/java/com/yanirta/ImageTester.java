@@ -1,6 +1,5 @@
 package com.yanirta;
 
-import com.applitools.eyes.BatchInfo;
 import com.applitools.eyes.MatchLevel;
 import com.yanirta.lib.*;
 import org.apache.commons.cli.*;
@@ -69,17 +68,8 @@ public class ImageTester {
             config.forcedName = cmd.getOptionValue("fn", null);
             config.sequenceName = cmd.getOptionValue("sq", null);
             config.setViewport(cmd.getOptionValue("vs", null));
-            config.notifyOnComplete = cmd.hasOption("nc");
             config.setMatchSize(cmd.getOptionValue("ms", null));
-
-
-            String ciJobName = System.getenv("JOB_NAME");
-            String ciApplitoolsBatchId = System.getenv("APPLITOOLS_BATCH_ID");
-            if (Utils.ne(ciJobName, ciApplitoolsBatchId)) {
-                config.flatBatch = new BatchInfo(ciJobName);
-                config.flatBatch.setId(ciApplitoolsBatchId);
-            } else if (cmd.hasOption("fb"))
-                config.flatBatch = new BatchInfo(cmd.getOptionValue("fb"));
+            config.setBatchInfo(cmd);
 
             File root = new File(cmd.getOptionValue("f", "."));
             int maxThreads = Integer.parseInt(cmd.getOptionValue("th", "3"));
@@ -95,11 +85,16 @@ public class ImageTester {
                 config.eyesUtilsConf = new EyesUtilitiesConfig(cmd);
 
             if (suite == null) {
-                System.out.printf("Nothing to test!\n");
+                System.out.println("Nothing to test!\n");
                 System.exit(0);
             }
 
             suite.run();
+
+            //close batches before exit
+            config.closeBatches();
+
+            //exit
             System.exit(0);
         } catch (ParseException e) {
             logger.reportException(e);
@@ -295,7 +290,7 @@ public class ImageTester {
                 .argName("testName")
                 .build());
         options.addOption(Option.builder("nc")
-                .longOpt("notifyComplition")
+                .longOpt("notifyCompletion")
                 .desc("Send batch notifications on completion")
                 .hasArg(false)
                 .build());

@@ -1,5 +1,6 @@
 package com.yanirta.lib;
 
+import com.yanirta.BatchObjects.Batch;
 import com.yanirta.TestObjects.IDisposable;
 import com.yanirta.TestObjects.TestBase;
 import com.applitools.eyes.BatchInfo;
@@ -12,9 +13,7 @@ import java.util.Queue;
 import java.util.concurrent.*;
 
 public class TestExecutor {
-    private final Logger logger_;
-    private final BatchInfo flatBatch_;
-    private final String sequenceName_;
+    private final Config config_;
     private ExecutorService executorService_;
     private ThreadLocal<Eyes> thEyes_;
     private Queue<Future<ExecutorResult>> results_ = new LinkedList<>();
@@ -22,23 +21,19 @@ public class TestExecutor {
     public TestExecutor(int threads, EyesFactory eyesFactory, Config conf) {
         this.executorService_ = Executors.newFixedThreadPool(threads);
         this.thEyes_ = ThreadLocal.withInitial(() -> eyesFactory.build());
-        this.logger_ = conf.logger;
-        this.flatBatch_ = conf.flatBatch;
-        this.sequenceName_ = conf.sequenceName;
-        if(this.flatBatch_!=null)
-            this.flatBatch_.setNotifyOnCompletion(conf.notifyOnComplete);
+        this.config_ = conf;
     }
 
-    public void enqueue(TestBase test, BatchInfo batch) {
+    public void enqueue(TestBase test, BatchInfo overrideBatch) {
         Future<ExecutorResult> f = executorService_.submit(() -> {
             long startTime = System.nanoTime();
             Eyes eyes = thEyes_.get();
-            eyes.setBatch(flatBatch_ != null ? flatBatch_ : batch);
-            if (sequenceName_ != null && !StringUtils.isEmpty(sequenceName_))
-                eyes.getBatch().setSequenceName(sequenceName_);
+            //set batch
+            setBatch(eyes, overrideBatch, config_);
             TestResults result = test.runSafe(eyes);
             eyes.abortIfNotClosed();
-            eyes.setBatch(null);
+            //add batch to close
+            addBatchToClose(eyes);
             if (test instanceof IDisposable)
                 ((IDisposable) test).dispose();
             long endTime = System.nanoTime();
@@ -54,14 +49,39 @@ public class TestExecutor {
         int curr = 1;
         while (!results_.isEmpty()) {
             try {
-                logger_.printProgress(curr++, total);
+                config_.logger.printProgress(curr++, total);
                 ExecutorResult result = results_.remove().get();
-                logger_.reportResult(result);
+                config_.logger.reportResult(result);
             } catch (Exception e) {
-                logger_.reportException(e);
+                config_.logger.reportException(e);
             }
         }
 
         executorService_.shutdown();
+    }
+
+    //set eyes correct batch
+    public void setBatch(Eyes eyes, BatchInfo overrideBatch, Config config) {
+        BatchInfo batchToSet;
+        if (config.flatBatch != null) {
+            batchToSet = config.flatBatch;
+        } else if (overrideBatch != null) {
+            batchToSet = overrideBatch;
+        } else {
+            batchToSet = new Batch(config).batchInfo();
+        }
+
+        //set batch
+        eyes.setBatch(batchToSet);
+
+        //set sequence name if necessary
+        if (config_.sequenceName != null && !StringUtils.isEmpty(config_.sequenceName))
+            eyes.getBatch().setSequenceName(config_.sequenceName);
+    }
+
+    //add batch to batch to close list in order to get batch notifications
+    public void addBatchToClose(Eyes eyes) {
+        config_.addBatchIdToCloseList(eyes.getBatch().getId());
+        eyes.setBatch(null);
     }
 }

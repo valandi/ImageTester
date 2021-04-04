@@ -3,6 +3,11 @@ package com.yanirta.lib;
 import com.applitools.eyes.BatchInfo;
 import com.applitools.eyes.ProxySettings;
 import com.applitools.eyes.RectangleSize;
+import com.applitools.eyes.fluent.BatchClose;
+import com.yanirta.BatchObjects.Batch;
+import org.apache.commons.cli.CommandLine;
+
+import java.util.ArrayList;
 
 public class Config {
     public RectangleSize viewport;
@@ -23,6 +28,7 @@ public class Config {
     public ProxySettings proxy_settings = null;
     public String matchWidth = null;
     public String matchHeight = null;
+    private ArrayList<String> batchesIdListForBatchClose;
 
     public void setViewport(String viewport) {
         if (viewport == null) return;
@@ -54,5 +60,65 @@ public class Config {
         if (dims.length > 1)
             matchHeight = dims[1];
         return;
+    }
+
+    //set batch related info
+    public void setBatchInfo(CommandLine cmd) {
+        //initialize batches Id List for batch close
+        initializeBatchesIdList();
+
+        //set notify on complete
+        notifyOnComplete = cmd.hasOption("nc");
+
+        //set batch- take flat batch if described- get environment variables values unless overwritten
+        String batchNameToAdd = System.getenv("JOB_NAME");;
+        String batchIdToAdd = System.getenv("APPLITOOLS_BATCH_ID");;
+
+
+        //set flat batch- config.notify complete must be before this set
+        if (cmd.hasOption("fb")) {
+            //check if batch id was specified
+            String batchValue = cmd.getOptionValue("fb");
+            batchNameToAdd = batchValue;
+            batchIdToAdd = null;
+
+            if (batchValue.contains("<>")) {
+                batchNameToAdd = batchValue.substring(0,batchValue.indexOf('<'));
+                batchIdToAdd = batchValue.substring(batchValue.indexOf('>') + 1);
+            }
+        }
+
+        //if flat batch name is not empty initialize flat batch
+        if (Utils.ne(batchNameToAdd)) {
+            flatBatch = new Batch(batchNameToAdd, this).batchInfo();
+            //if flat batch id is not empty set batch id
+            if (Utils.ne(batchIdToAdd)) {
+                flatBatch.setId(batchIdToAdd);
+            }
+        }
+    }
+
+    //initialize batches id list
+    public void initializeBatchesIdList() {
+        batchesIdListForBatchClose = new ArrayList<>();
+    }
+
+
+    //add batch id to list
+    public void addBatchIdToCloseList(String batchId) {
+        batchesIdListForBatchClose.add(batchId);
+    }
+
+    //close batches
+    public void closeBatches(){
+        if (notifyOnComplete) {
+            BatchClose batchClose = new BatchClose();
+            batchClose.setApiKey(apiKey);
+            if (serverUrl != null)
+                batchClose.setUrl(serverUrl);
+            if (proxy_settings != null)
+                batchClose.setProxy(proxy_settings);
+            batchClose.setBatchId(batchesIdListForBatchClose).close();
+        }
     }
 }
