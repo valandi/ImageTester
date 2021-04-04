@@ -14,4 +14,8 @@ public class Batch extends BatchBase {
     public Batch(String name, Config conf) {
         super(new BatchInfo(name), conf.notifyOnComplete);
     }
+
+    public Batch(Config conf) {
+        super(new BatchInfo(), conf.notifyOnComplete);
+    }
 }

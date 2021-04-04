@@ -76,6 +76,7 @@ The tool build in java and requires minimal set of parameters the minimal comman
     + `-th [number]` - Specify max. concurrent workers (Threads). default= 3
     + `-fn [testName]` - Force all test names to be specific name. This will force all tests to be matched with a single baseline.
     + `-fb [batchName]` - Set unified flat batch to contain all the discovered tests regardless their hierarchy.
+      + To add batch id to the flat batch use the following syntax:`-fb BATCH_NAME<>BATCH_ID`
     + `-sq [sequenceName]` - Set batch sequenceName for unified insights in applitools' dashboard.
     + `-ms [matchsize]` - Match the size of the images to a specific width and/or height ie. `1000x`- adjust by width, `x600`-adjust by height, `1000x600`- fit to the exact size (note, if both provided, may loose proportions)
     + `-nc` - Send batch notification on complete.

@@ -14,7 +14,7 @@
         <!-- Important,
         make sure that you sync. manually the version with the one in
         resources/META-INF/MANIFEST.MF -->
-        <project.version>1.4.12</project.version>
+        <project.version>1.4.13</project.version>
     </properties>
 
     <dependencies>
@@ -39,12 +39,12 @@
         <dependency>
             <groupId>org.apache.pdfbox</groupId>
             <artifactId>pdfbox</artifactId>
-            <version>[1.8.12,)</version>
+            <version>2.0.23</version>
         </dependency>
         <dependency>
             <groupId>com.applitools</groupId>
             <artifactId>eyes-images-java3</artifactId>
-            <version>3.188.0</version>
+            <version>3.197.0</version>
         </dependency>
         <dependency>
             <groupId>org.ghost4j</groupId>

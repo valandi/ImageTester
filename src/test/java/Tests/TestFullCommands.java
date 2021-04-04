@@ -22,12 +22,12 @@ public class TestFullCommands {
 
     @Test
     public void testFolderSimple() {
-        ImageTester.main("-f TestData -th 10 -di 200".split(" "));
+        ImageTester.main("-f TestData/ -th 10 -di 200".split(" "));
     }
 
     @Test
     public void testFolderSimpleDebug() {
-        ImageTester.main("-f TestData -debug".split(" "));
+        ImageTester.main("-f TestData/ -debug".split(" "));
     }
 
 
@@ -78,27 +78,45 @@ public class TestFullCommands {
     }
 
     @Test
+    public void testBatchNotificationsLongFlag() {
+        ImageTester.main("-f TestData/b/c/JustPDF/Lorem2.pdf --notifyCompletion".split(" "));
+    }
+
+    @Test
     public void testPDFFolderWithBatchNotifications() {
         ImageTester.main("-f TestData/b/c/JustPDF/ -nc".split(" "));
     }
 
+    //to add id use the following:
+    //-fb BATCH_NAME_HERE<>BATCH_ID_HERE
+
+    @Test
+    public void testBatchNotificationsWithFlatBatchAndId() {
+        ImageTester.main("-f TestData/b/c/JustPDF/Lorem2.pdf -nc -fb EmailNotificationBatch<>asjkhgdfdjskhhghjfgs".split(" "));
+    }
+
+    @Test
+    public void testBatchNotificationsWithAll() {
+        ImageTester.main("-f  TestData/ -nc".split(" "));
+    }
+
     @Test
     public void testImageScaling1() {
-        ImageTester.main("-f TestData/a -ms 1000".split(" "));
+        ImageTester.main("-f TestData/a/ -ms 1000".split(" "));
     }
 
     @Test
     public void testImageScaling2() {
-        ImageTester.main("-f TestData/a -ms x1000".split(" "));
+        ImageTester.main("-f TestData/a/ -ms x1000".split(" "));
     }
 
     @Test
     public void testImageScaling3() {
-        ImageTester.main("-f TestData/a -ms 1000x1000".split(" "));
+        ImageTester.main("-f TestData/a/ -ms 1000x1000".split(" "));
     }
 
     @Test
     public void testImageScaling4() {
-        ImageTester.main("-f TestData/a -ms 1000x".split(" "));
+        ImageTester.main("-f TestData/a/ -ms 1000x".split(" "));
     }
 }
