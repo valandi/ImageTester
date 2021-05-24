@@ -1,10 +1,14 @@
 package com.yanirta.lib;
 
 import com.applitools.eyes.FileLogger;
+import com.applitools.eyes.FixedCutProvider;
 import com.applitools.eyes.MatchLevel;
 import com.applitools.eyes.ProxySettings;
 import com.applitools.eyes.images.Eyes;
+import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Arrays;
 
 public class EyesFactory {
     private final String version;
@@ -22,6 +26,7 @@ public class EyesFactory {
     private boolean saveFailed = false;
     private boolean ignoreDisplacement = false;
     private boolean saveNewTests = false;
+    private int[] cutValues;
 
     public EyesFactory(String ver, Logger logger) {
         this.version = ver;
@@ -61,6 +66,13 @@ public class EyesFactory {
             eyes.setLogHandler(new FileLogger(this.logFilename, true, true));
         if (this.proxySettings != null)
             eyes.setProxy(proxySettings);
+        if (this.cutValues != null) {
+            int header = cutValues[0];
+            int footer = cutValues.length > 1 ? cutValues[1] : 0;
+            int left = cutValues.length > 2 ? cutValues[2] : 0;
+            int right = cutValues.length == 4 ? cutValues[3] : 0;
+            eyes.setImageCut(new FixedCutProvider(header, footer, left, right));
+        }
 
         if (StringUtils.isNotBlank(this.parentBranch) && StringUtils.isBlank(this.branch))
             throw new RuntimeException("Parent Branches (pb) should be combined with branches (br).");
@@ -130,6 +142,16 @@ public class EyesFactory {
 
     public EyesFactory saveNewTests(boolean save) {
         this.saveNewTests = save;
+        return this;
+    }
+
+    public EyesFactory imageCut(String[] cutArgs) {
+        if (cutArgs.length > 4)
+            throw new SyntaxException("Image cut must contain at most four parameters (header,footer,left,right)");
+        this.cutValues = Arrays
+                .stream(cutArgs)
+                .mapToInt((s) -> StringUtils.isNumeric(s) ? Integer.parseInt(s) : 0)
+                .toArray();
         return this;
     }
 }

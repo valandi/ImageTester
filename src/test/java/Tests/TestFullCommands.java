@@ -125,4 +125,24 @@ public class TestFullCommands {
     public void testImageScaling4() {
         ImageTester.main("-f TestData/a/ -ms 1000x".split(" "));
     }
+
+    @Test
+    public void testImageCutFull(){
+        ImageTester.main("-f TestData/a/ -ic 10,20,30,40".split(" "));
+    }
+
+    @Test
+    public void testImageCutWidth(){
+        ImageTester.main("-f TestData/a/ -ic 10".split(" "));
+    }
+
+    @Test
+    public void testImageCutHeight(){
+        ImageTester.main("-f TestData/a/ -ic ,20,".split(" "));
+    }
+
+    @Test
+    public void testImageCutMixed(){
+        ImageTester.main("-f TestData/a/ -ic ,50,,100".split(" "));
+    }
 }

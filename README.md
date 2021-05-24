@@ -78,7 +78,8 @@ The tool build in java and requires minimal set of parameters the minimal comman
     + `-fb [batchName]` - Set unified flat batch to contain all the discovered tests regardless their hierarchy.
       + To add batch id to the flat batch use the following syntax:`-fb BATCH_NAME<>BATCH_ID`
     + `-sq [sequenceName]` - Set batch sequenceName for unified insights in applitools' dashboard.
-    + `-ms [matchsize]` - Match the size of the images to a specific width and/or height ie. `1000x`- adjust by width, `x600`-adjust by height, `1000x600`- fit to the exact size (note, if both provided, may loose proportions)
+    + `-ms [{width x height}]` - Match the size of the images to a specific width and/or height ie. `1000x`- adjust by width, `x600`-adjust by height, `1000x600`- fit to the exact size (note, if both provided, may loose proportions)
+    + `-ic [{header,footer,left,right}]` - Set pixels to cut from each side (one or more) in the format [header,footer,left,right], including missing notations ie: `-ic ,,10,4`
     + `-nc` - Send batch notification on complete.
     + `-as` - Set automatic save on failures
     + `-st` - Split steps to individual tests

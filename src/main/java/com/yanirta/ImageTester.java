@@ -54,7 +54,8 @@ public class ImageTester {
                     .hostApp(cmd.getOptionValue("ap"))
                     .saveFaliedTests(cmd.hasOption("as"))
                     .ignoreDisplacement(cmd.hasOption("id"))
-                    .saveNewTests(!cmd.hasOption("pn"));
+                    .saveNewTests(!cmd.hasOption("pn"))
+                    .imageCut(cmd.getOptionValues("ic"));
 
 
             config.splitSteps = cmd.hasOption("st");
@@ -296,6 +297,13 @@ public class ImageTester {
                 .desc("Send batch notifications on completion")
                 .hasArg(false)
                 .build());
+        options.addOption(Option.builder("ic")
+                .longOpt("imageCut")
+                .desc("set pixels to cut from each side (one or more) in the format [header,footer,left,right],including missing notations ie: '-ic ,,10,4' ")
+                .hasArgs()
+                .valueSeparator(',')
+                .build()
+        );
         if (eyes_utils_enabled) {
             System.out.printf("%s is integrated, extra features are available. \n", eyes_utils);
             EyesUtilitiesConfig.injectOptions(options);
