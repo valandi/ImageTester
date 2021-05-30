@@ -5,7 +5,6 @@ import com.applitools.eyes.FixedCutProvider;
 import com.applitools.eyes.MatchLevel;
 import com.applitools.eyes.ProxySettings;
 import com.applitools.eyes.images.Eyes;
-import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
@@ -146,8 +145,10 @@ public class EyesFactory {
     }
 
     public EyesFactory imageCut(String[] cutArgs) {
+        if (cutArgs == null)
+            return this;
         if (cutArgs.length > 4)
-            throw new SyntaxException("Image cut must contain at most four parameters (header,footer,left,right)");
+            throw new RuntimeException("Image cut must contain at most four parameters (header,footer,left,right)");
         this.cutValues = Arrays
                 .stream(cutArgs)
                 .mapToInt((s) -> StringUtils.isNumeric(s) ? Integer.parseInt(s) : 0)

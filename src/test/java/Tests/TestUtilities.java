@@ -21,6 +21,12 @@ public class TestUtilities extends TestBase {
     }
 
     @Test
+    public void getDiffs(){
+        runBlackBox("TestData/diffs/actual/lorem_20.pdf", "-gd");
+    }
+
+
+    @Test
     public void aVoid(){
         String[] x = "x1000".split("x");
         return;
