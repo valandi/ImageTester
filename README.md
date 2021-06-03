@@ -86,6 +86,7 @@ The tool build in java and requires minimal set of parameters the minimal comman
     + `-id` - Ignore displacement of shifting elements.
     + `-pn` - Prompt new tests, new tests will not be saved automatically, the user will have to review and save manually.
     + `-dv` - Disable SSL certificate validation. !!!Unsecured!!!
+    + `-lo` - Use legacy files order to comply with baselines that were created with versions below 2.0
 
 
     ###### For Documents (PDFs) only

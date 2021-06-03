@@ -8,15 +8,16 @@ import com.yanirta.BatchObjects.PDFFileBatch;
 import com.yanirta.lib.Config;
 import com.yanirta.lib.Patterns;
 import com.yanirta.lib.TestExecutor;
+import org.apache.commons.io.comparator.NameFileComparator;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
 public class Suite {
     private final TestExecutor executor_;
-    private final Config config_;
     private List<TestBase> tests_ = new ArrayList<>();
     private List<BatchBase> batches_ = new ArrayList<>();
 
@@ -29,7 +30,7 @@ public class Suite {
     private Suite(File file, Config conf, TestExecutor executor) {
         conf.logger.reportDiscovery(file);
         executor_ = executor;
-        config_ = conf;
+
         if (!file.exists())
             throw new RuntimeException(
                     String.format("Fatal! The path %s does not exists \n", file.getAbsolutePath()));
@@ -63,7 +64,11 @@ public class Suite {
 
             Batch currBatch = new Batch(file);
 
-            for (File child : file.listFiles()) {
+            File[] children = file.listFiles();
+            if (!conf.legacyFileOrder)
+                Arrays.sort(children, NameFileComparator.NAME_COMPARATOR);
+
+            for (File child : children) {
                 Suite curr = new Suite(child, conf, executor);
                 currBatch.addTests(curr.tests_);
                 batches_.addAll(curr.batches_);

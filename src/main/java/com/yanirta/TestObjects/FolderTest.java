@@ -5,12 +5,14 @@ import com.applitools.eyes.TestResults;
 import com.applitools.eyes.images.Eyes;
 import com.yanirta.lib.Config;
 import com.yanirta.lib.Patterns;
+import org.apache.commons.io.comparator.NameFileComparator;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class FolderTest extends TestBase {
     private final FilenameFilter imageFilesFilter = (dir, name) -> Patterns.IMAGE.matcher(name).matches();
@@ -21,6 +23,8 @@ public class FolderTest extends TestBase {
         if (!folder.isDirectory())
             throw new RuntimeException("FolderTest object can't process non folder object");
         this.steps_ = folder.listFiles(imageFilesFilter);
+        if (!conf.legacyFileOrder)
+            Arrays.sort(this.steps_, NameFileComparator.NAME_COMPARATOR);
     }
 
     public TestResults run(Eyes eyes) throws Exception {

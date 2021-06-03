@@ -28,6 +28,7 @@ public class Config {
     public ProxySettings proxy_settings = null;
     public String matchWidth = null;
     public String matchHeight = null;
+    public boolean legacyFileOrder = false;
     private HashSet<String> batchesIdListForBatchClose = new HashSet<>();
 
     public void setViewport(String viewport) {

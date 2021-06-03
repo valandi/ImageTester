@@ -127,22 +127,42 @@ public class TestFullCommands {
     }
 
     @Test
-    public void testImageCutFull(){
+    public void testImageCutFull() {
         ImageTester.main("-f TestData/a/ -ic 10,20,30,40".split(" "));
     }
 
     @Test
-    public void testImageCutWidth(){
+    public void testImageCutWidth() {
         ImageTester.main("-f TestData/a/ -ic 10".split(" "));
     }
 
     @Test
-    public void testImageCutHeight(){
+    public void testImageCutHeight() {
         ImageTester.main("-f TestData/a/ -ic ,20,".split(" "));
     }
 
     @Test
-    public void testImageCutMixed(){
+    public void testImageCutMixed() {
         ImageTester.main("-f TestData/a/ -ic ,50,,100".split(" "));
+    }
+
+    @Test
+    public void testOrderNumeric() {
+        ImageTester.main("-f /Users/yanir/Code/Github/ImageTester/TestData/jpegs/numeric -debug".split(" "));
+    }
+
+    @Test
+    public void testOrderAlphabetic() {
+        ImageTester.main("-f /Users/yanir/Code/Github/ImageTester/TestData/jpegs/alphabetic -debug".split(" "));
+    }
+
+    @Test
+    public void testOrderNumericLegacy() {
+        ImageTester.main("-f /Users/yanir/Code/Github/ImageTester/TestData/jpegs/numeric -lo -debug".split(" "));
+    }
+
+    @Test
+    public void testOrderAlphabeticLegacy() {
+        ImageTester.main("-f /Users/yanir/Code/Github/ImageTester/TestData/jpegs/alphabetic -lo -debug".split(" "));
     }
 }

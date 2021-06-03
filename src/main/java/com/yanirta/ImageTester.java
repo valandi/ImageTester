@@ -68,6 +68,7 @@ public class ImageTester {
             config.includePageNumbers = cmd.hasOption("pn");
             config.forcedName = cmd.getOptionValue("fn", null);
             config.sequenceName = cmd.getOptionValue("sq", null);
+            config.legacyFileOrder = cmd.hasOption("lo");
             config.setViewport(cmd.getOptionValue("vs", null));
             config.setMatchSize(cmd.getOptionValue("ms", null));
             config.setBatchInfo(
@@ -302,8 +303,12 @@ public class ImageTester {
                 .desc("set pixels to cut from each side (one or more) in the format [header,footer,left,right],including missing notations ie: '-ic ,,10,4' ")
                 .hasArgs()
                 .valueSeparator(',')
-                .build()
-        );
+                .build());
+        options.addOption(Option.builder("lo")
+                .longOpt("legacyFileOrder")
+                .desc("Use legacy files order to comply with baselines that were created with versions below 2.0")
+                .hasArg(false)
+                .build());
         if (eyes_utils_enabled) {
             System.out.printf("%s is integrated, extra features are available. \n", eyes_utils);
             EyesUtilitiesConfig.injectOptions(options);
