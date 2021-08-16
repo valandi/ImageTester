@@ -66,6 +66,18 @@ public class Utils {
         throw new RuntimeException(String.format("Unable to parse value %s for enum %s", string, c.getName()));
     }
 
+
+    public static <T extends Enum<T>> T parseEnum(Class<T> c, String s, String avoid_chars) {
+        T[] values = c.getEnumConstants();
+        for (T value : values) {
+            String ename = value.name().replace(avoid_chars, "");
+            if (ename.equalsIgnoreCase(s.replace(avoid_chars, "")))
+                return value;
+        }
+
+        throw new RuntimeException(String.format("Unable to parse value %s for enum %s", s, c.getName()));
+    }
+
     public static String getEnumValues(Class type) {
         StringBuilder sb = new StringBuilder();
         for (Object val : EnumSet.allOf(type)) {

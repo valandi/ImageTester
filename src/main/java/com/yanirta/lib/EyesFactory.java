@@ -1,9 +1,6 @@
 package com.yanirta.lib;
 
-import com.applitools.eyes.FileLogger;
-import com.applitools.eyes.FixedCutProvider;
-import com.applitools.eyes.MatchLevel;
-import com.applitools.eyes.ProxySettings;
+import com.applitools.eyes.*;
 import com.applitools.eyes.images.Eyes;
 import org.apache.commons.lang3.StringUtils;
 
@@ -26,6 +23,7 @@ public class EyesFactory {
     private boolean ignoreDisplacement = false;
     private boolean saveNewTests = false;
     private int[] cutValues;
+    private AccessibilitySettings accSettings = null;
 
     public EyesFactory(String ver, Logger logger) {
         this.version = ver;
@@ -45,7 +43,6 @@ public class EyesFactory {
         eyes.setSaveFailedTests(saveFailed);
         eyes.setIgnoreDisplacements(ignoreDisplacement);
         eyes.setSaveNewTests(saveNewTests);
-
         //String params
         if (StringUtils.isNotBlank(this.serverUrl))
             eyes.setServerUrl(this.serverUrl);
@@ -75,6 +72,8 @@ public class EyesFactory {
 
         if (StringUtils.isNotBlank(this.parentBranch) && StringUtils.isBlank(this.branch))
             throw new RuntimeException("Parent Branches (pb) should be combined with branches (br).");
+        if (this.accSettings != null)
+            eyes.setAccessibilityValidation(this.accSettings);
 
         return eyes;
     }
@@ -148,11 +147,26 @@ public class EyesFactory {
         if (cutArgs == null)
             return this;
         if (cutArgs.length > 4)
-            throw new RuntimeException("Image cut must contain at most four parameters (header,footer,left,right)");
+            throw new IllegalArgumentException("Image cut must contain at most four parameters (header,footer,left,right)");
         this.cutValues = Arrays
                 .stream(cutArgs)
                 .mapToInt((s) -> StringUtils.isNumeric(s) ? Integer.parseInt(s) : 0)
                 .toArray();
+        return this;
+    }
+
+    public EyesFactory accSettings(String[] settings) {
+        if (settings == null)
+            return this;
+        AccessibilityLevel level = AccessibilityLevel.AA;
+        AccessibilityGuidelinesVersion version = AccessibilityGuidelinesVersion.WCAG_2_0;
+        if (settings.length > 2)
+            throw new IllegalArgumentException("incorrect Accessibility setting");
+        if (settings != null && settings.length > 0) {
+            level = StringUtils.isNotBlank(settings[0]) ? Utils.parseEnum(AccessibilityLevel.class, settings[0], "_") : level;
+            version = settings.length == 2 && StringUtils.isNotBlank(settings[1]) ? Utils.parseEnum(AccessibilityGuidelinesVersion.class, settings[1], "_") : version;
+        }
+        this.accSettings = new AccessibilitySettings(level, version);
         return this;
     }
 }

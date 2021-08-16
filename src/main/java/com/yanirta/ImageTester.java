@@ -1,5 +1,7 @@
 package com.yanirta;
 
+import com.applitools.eyes.AccessibilityGuidelinesVersion;
+import com.applitools.eyes.AccessibilityLevel;
 import com.applitools.eyes.MatchLevel;
 import com.yanirta.lib.*;
 import org.apache.commons.cli.*;
@@ -38,6 +40,8 @@ public class ImageTester {
             config.apiKey = cmd.getOptionValue("k", System.getenv("APPLITOOLS_API_KEY"));
             config.serverUrl = cmd.getOptionValue("s", null);
             config.setProxy(cmd.getOptionValues("p"));
+            String[] accessibilityOptions = cmd.getOptionValues("ac");
+            accessibilityOptions = cmd.hasOption("ac") && accessibilityOptions == null ? new String[0] : accessibilityOptions;
 
             // Eyes factory
             EyesFactory factory
@@ -55,7 +59,8 @@ public class ImageTester {
                     .saveFaliedTests(cmd.hasOption("as"))
                     .ignoreDisplacement(cmd.hasOption("id"))
                     .saveNewTests(!cmd.hasOption("pn"))
-                    .imageCut(cmd.getOptionValues("ic"));
+                    .imageCut(cmd.getOptionValues("ic"))
+                    .accSettings(accessibilityOptions);
 
 
             config.splitSteps = cmd.hasOption("st");
@@ -103,14 +108,17 @@ public class ImageTester {
         } catch (ParseException e) {
             logger.reportException(e);
             logger.printHelp(options);
+            System.exit(-1);
         } catch (IOException e) {
             logger.reportException(e);
             logger.printHelp(options);
             System.exit(-1);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
+            System.exit(-1);
         } catch (KeyManagementException e) {
             e.printStackTrace();
+            System.exit(-1);
         }
     }
 
@@ -300,7 +308,7 @@ public class ImageTester {
                 .build());
         options.addOption(Option.builder("ic")
                 .longOpt("imageCut")
-                .desc("set pixels to cut from each side (one or more) in the format [header,footer,left,right],including missing notations ie: '-ic ,,10,4' ")
+                .desc("set pixels to cut from each side (one or more) in the format [header,footer,left,right],partial missing notations ie: '-ic ,,10,4' ")
                 .hasArgs()
                 .valueSeparator(',')
                 .build());
@@ -309,6 +317,15 @@ public class ImageTester {
                 .desc("Use legacy files order to comply with baselines that were created with versions below 2.0")
                 .hasArg(false)
                 .build());
+        options.addOption(Option.builder("ac")
+                .longOpt("accessibility")
+                .desc("Set accessibility validation options in the format [Level:GuidelineVer], default: \"AA:WCAG_2_0\", including partial notations ie: \":WCAG_2_1\"")
+                .numberOfArgs(2)
+                .optionalArg(true)
+                .valueSeparator(':') //, and not ; to avoid bash commands separation
+                .argName(String.format("[%s]:[%s]", Utils.getEnumValues(AccessibilityLevel.class), Utils.getEnumValues(AccessibilityGuidelinesVersion.class)))
+                .build());
+
         if (eyes_utils_enabled) {
             System.out.printf("%s is integrated, extra features are available. \n", eyes_utils);
             EyesUtilitiesConfig.injectOptions(options);

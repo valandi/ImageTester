@@ -148,21 +148,47 @@ public class TestFullCommands {
 
     @Test
     public void testOrderNumeric() {
-        ImageTester.main("-f /Users/yanir/Code/Github/ImageTester/TestData/jpegs/numeric -debug".split(" "));
+        ImageTester.main("-f TestData/jpegs/numeric -debug".split(" "));
     }
 
     @Test
     public void testOrderAlphabetic() {
-        ImageTester.main("-f /Users/yanir/Code/Github/ImageTester/TestData/jpegs/alphabetic -debug".split(" "));
+        ImageTester.main("-f TestData/jpegs/alphabetic -debug".split(" "));
     }
 
     @Test
+    public void testMixedOrder() {
+        ImageTester.main("-f TestData/jpegs/mixed -debug".split(" "));
+    }
+
+
+    @Test
     public void testOrderNumericLegacy() {
-        ImageTester.main("-f /Users/yanir/Code/Github/ImageTester/TestData/jpegs/numeric -lo -debug".split(" "));
+        ImageTester.main("-f TestData/jpegs/numeric -lo -debug".split(" "));
     }
 
     @Test
     public void testOrderAlphabeticLegacy() {
-        ImageTester.main("-f /Users/yanir/Code/Github/ImageTester/TestData/jpegs/alphabetic -lo -debug".split(" "));
+        ImageTester.main("-f TestData/jpegs/alphabetic -lo -debug".split(" "));
+    }
+
+    @Test
+    public void testAccessibility(){
+        ImageTester.main("-f TestData/b/c/JustPDF/Lorem2.pdf -ac".split(" "));
+    }
+
+    @Test
+    public void testAccessibilityWCAG21(){
+        ImageTester.main("-f TestData/b/Lorem1.pdf -ac :WCAG21".split(" "));
+    }
+
+    @Test
+    public void testAccessibilityAAA(){
+        ImageTester.main("-f TestData/b/Lorem1.pdf -ac AAA".split(" "));
+    }
+
+    @Test
+    public void testAccessibilityAAA_WCAG21(){
+        ImageTester.main("-f TestData/b/Lorem1.pdf -ac AAA:WCAG21".split(" "));
     }
 }
