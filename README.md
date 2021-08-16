@@ -87,14 +87,14 @@ The tool build in java and requires minimal set of parameters the minimal comman
     + `-pn` - Prompt new tests, new tests will not be saved automatically, the user will have to review and save manually.
     + `-dv` - Disable SSL certificate validation. !!!Unsecured!!!
     + `-lo` - Use legacy files order to comply with baselines that were created with versions below 2.0
-
+    + `-ac [Level:GuidelineVer]` - Set accessibility validation and optionally it's arguments split by semicolumns ':' default: "AA:WCAG_2_0", available options: [AA|AAA:WCAG_2_0|WCAG_2_1]
 
     ###### For Documents (PDFs) only
     + `-di [dpi]` - Set the quality of the conversion on PDF files
     + `-sp [pages]` - Comma separated page numbers\range to include in PDF testing (ie: 1,2,5,7,10-15); Default all included
     + `-pp [password]` - The password if the PDF files protected
     + `-pn` - Preserve original directory test names when specifying pages
- 
+
 ## Enterprise features in combination with [Eyes Utilities](https://github.com/yanirta/EyesUtilities)
 By placing the Eyes-Utilities jar into the same folder as the com.yanirta.ImageTester, new enterprise api features
 made possible by providing an enterprise read-key.
