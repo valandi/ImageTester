@@ -10,14 +10,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class Logger {
     private final PrintStream out_;
     private boolean debug_;
     private final SimpleDateFormat dateFormatter_ = new SimpleDateFormat("HH:mm:ss");
-    Calendar calendar = Calendar.getInstance();
 
     public Logger() {
         this(System.out, false);
@@ -43,8 +42,10 @@ public class Logger {
     }
 
     private void printPrefix() {
-        if (debug_)
-            out_.printf("[%s] [%s] ", dateFormatter_.format(calendar.getTime()), Thread.currentThread().getName());
+        if (debug_) {
+            Date date = new Date(System.currentTimeMillis());
+            out_.printf("[%s] [%s] ", dateFormatter_.format(date), Thread.currentThread().getName());
+        }
     }
 
     public void reportDebug(String format, Object... args) {
