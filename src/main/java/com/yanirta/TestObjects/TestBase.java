@@ -7,6 +7,7 @@ import com.yanirta.lib.Config;
 import com.yanirta.lib.Logger;
 import com.yanirta.lib.Utils;
 import org.apache.commons.lang3.StringUtils;
+import org.imgscalr.Scalr;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -80,12 +81,9 @@ public abstract class TestBase implements ITest {
         if (StringUtils.isNotBlank(conf_.matchWidth) || StringUtils.isNotBlank(conf_.matchHeight)) {
             //Resize the image
             Dimension dim = getNewDimensions_(bim.getWidth(), bim.getHeight());
-            BufferedImage resizedImage = new BufferedImage(dim.width, dim.height, BufferedImage.TYPE_INT_RGB);
-            Graphics2D graphics2D = resizedImage.createGraphics();
-            graphics2D.drawImage(bim, 0, 0, dim.width, dim.height, null);
-            graphics2D.dispose();
+            BufferedImage scaledImg = Scalr.resize(bim, Scalr.Method.ULTRA_QUALITY, dim.width, dim.height);
             bim = null; //perhaps a better disposal required
-            bim = resizedImage;
+            bim = scaledImg;
         }
         return bim;
     }
