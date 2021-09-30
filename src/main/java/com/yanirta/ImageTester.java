@@ -79,6 +79,7 @@ public class ImageTester {
             config.setBatchInfo(
                     cmd.getOptionValue("fb", null),
                     cmd.hasOption("nc"));
+            config.dontCloseBatches = cmd.hasOption("dcb");
 
             File root = new File(cmd.getOptionValue("f", "."));
             int maxThreads = Integer.parseInt(cmd.getOptionValue("th", "3"));
@@ -324,6 +325,11 @@ public class ImageTester {
                 .optionalArg(true)
                 .valueSeparator(':') //, and not ; to avoid bash commands separation
                 .argName(String.format("[%s]:[%s]", Utils.getEnumValues(AccessibilityLevel.class), Utils.getEnumValues(AccessibilityGuidelinesVersion.class)))
+                .build());
+        options.addOption(Option.builder("dcb")
+                .longOpt("dontCloseBatch")
+                .desc("Don't automatically close batch when tests are finished running")
+                .hasArg(false)
                 .build());
 
         if (eyes_utils_enabled) {

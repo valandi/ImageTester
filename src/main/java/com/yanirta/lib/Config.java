@@ -4,6 +4,7 @@ import com.applitools.eyes.BatchInfo;
 import com.applitools.eyes.ProxySettings;
 import com.applitools.eyes.RectangleSize;
 import com.applitools.eyes.fluent.BatchClose;
+import com.applitools.eyes.fluent.EnabledBatchClose;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class Config {
     public String matchWidth = null;
     public String matchHeight = null;
     public boolean legacyFileOrder = false;
+    public boolean dontCloseBatches = false;
     private HashSet<String> batchesIdListForBatchClose = new HashSet<>();
 
     public void setViewport(String viewport) {
@@ -102,7 +104,8 @@ public class Config {
                 batchClose.setUrl(serverUrl);
             if (proxy_settings != null)
                 batchClose.setProxy(proxy_settings);
-            batchClose.setBatchId(new ArrayList(batchesIdListForBatchClose)).close();
+            EnabledBatchClose enabledBatchClose = batchClose.setBatchId(new ArrayList<>(batchesIdListForBatchClose));
+            if (!dontCloseBatches) enabledBatchClose.close();
         }
     }
 }

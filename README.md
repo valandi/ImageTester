@@ -88,6 +88,7 @@ The tool build in java and requires minimal set of parameters the minimal comman
     + `-dv` - Disable SSL certificate validation. !!!Unsecured!!!
     + `-lo` - Use legacy files order to comply with baselines that were created with versions below 2.0
     + `-ac [Level:GuidelineVer]` - Set accessibility validation and optionally it's arguments split by semicolumns ':' default: "AA:WCAG_2_0", available options: [AA|AAA:WCAG_2_0|WCAG_2_1]
+    + `-dcb` - ImageTester will not automatically close batch(es) when test is complete.
 
     ###### For Documents (PDFs) only
     + `-di [dpi]` - Set the quality of the conversion on PDF files
