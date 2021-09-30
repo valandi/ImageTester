@@ -1,4 +1,4 @@
-# Image Tester [ ![Download](https://img.shields.io/github/v/tag/yanirta/ImageTester?label=Download&style=plastic) ](https://github.com/yanirta/ImageTester/releases/latest)
+# Image Tester [ ![Download](https://img.shields.io/github/v/tag/valandi/ImageTester?label=Download&style=plastic) ](https://github.com/valandi/ImageTester/releases/latest)
 
 ImageTester is a Cli tool to perform visual tests on images or PDF files. 
 
