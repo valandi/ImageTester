@@ -13,12 +13,8 @@ import java.security.NoSuchAlgorithmException;
 
 public class ImageTester {
     private static final String cur_ver = ImageTester.class.getPackage().getImplementationVersion();
-    private static final String eyes_utils = "EyesUtilities.jar";
-
-    private static boolean eyes_utils_enabled = false;
 
     public static void main(String[] args) {
-        eyes_utils_enabled = new File(eyes_utils).exists();
         CommandLineParser parser = new DefaultParser();
         Options options = getOptions();
         Logger logger = new Logger();
@@ -91,8 +87,7 @@ public class ImageTester {
             Suite suite = Suite.create(root.getCanonicalFile(), config, executor);
 
             // EyesUtilities config
-            if (eyes_utils_enabled)
-                config.eyesUtilsConf = new EyesUtilitiesConfig(cmd);
+            config.eyesUtilsConf = new EyesUtilitiesConfig(cmd);
 
             if (suite == null) {
                 System.out.println("Nothing to test!\n");
@@ -332,10 +327,8 @@ public class ImageTester {
                 .hasArg(false)
                 .build());
 
-        if (eyes_utils_enabled) {
-            System.out.printf("%s is integrated, extra features are available. \n", eyes_utils);
-            EyesUtilitiesConfig.injectOptions(options);
-        }
+        EyesUtilitiesConfig.injectOptions(options);
+
         return options;
     }
 }
